@@ -38,9 +38,9 @@ const Table = ({ data }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((st, index) => (
-                        <tr key={stations[index]}>
-                            <td>{stations[index]}</td>
+                    {data.map(st => (
+                        <tr key={st.name}>
+                            <td>{stations[st.name]}</td>
                             <td>{lastReportTime(st.date)}</td>
                             <td>{roundVoltage(st.battery)}</td>
                             <td>{roundVoltage(st.panel)}</td>
@@ -70,8 +70,9 @@ const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit}) => {
 
 const baseUrl = "http://localhost:5000/api/v1"
 const lastReportsURL = baseUrl + "/lastreports"
+const fetchTime = 3600000  // One hour
 
-const initialStations =  stations.map(st => (
+const initialStations =  Object.values(stations).map(st => (
     {
         name: st,
         date: null,
@@ -93,22 +94,26 @@ const App = () => {
         }
     );
 
-
-    // TODO: re-fetch data every certain time
-    React.useEffect( () => {
-        dispatchStations({type: actions.initFetch})
-        async function fetchLastReports() {
-            try {
-                const result = await axios.get(lastReportsURL);
-                dispatchStations({
-                    type: actions.successFetch,
-                    payload: result.data,
-                })
-            } catch {
-                dispatchStations({ type: actions.failFetch });
-            }
+    const fetchLastReports = async () => {
+        dispatchStations({type: actions.initFetch});
+        try {
+            const result = await axios.get(lastReportsURL);
+            dispatchStations({
+                type: actions.successFetch,
+                payload: result.data,
+            })
+        } catch {
+            dispatchStations({ type: actions.failFetch });
         }
+    }
+    
+    React.useEffect( () => {
         fetchLastReports();
+        const interval = setInterval(() => {
+            fetchLastReports();
+            console.log("Fetched last reports");
+        }, fetchTime);
+        return () => clearInterval(interval);
     }, []);
 
     const handleSearchInput = (event) => {

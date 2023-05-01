@@ -17,13 +17,14 @@ export const stationsReducer = (state, action) => {
                 isError: false,
             };
         case actions.successFetch:
+            action.payload.sort((a, b) => a.name > b.name);
             return  {
                 ...state,
                 isLoading: false,
                 isError: false,
                 data: action.payload,
                 display: action.payload.filter(
-                    st => st.name.includes(state.searchTerm)
+                    st => st.name.toLowerCase().includes(state.searchTerm.toLowerCase())
                 )
             }
         case actions.failFetch:
@@ -41,7 +42,7 @@ export const stationsReducer = (state, action) => {
             return {
                 ...state,
                 display: state.data.filter(
-                    st => st.name.includes(state.searchTerm)
+                    st => st.name.toLowerCase().includes(state.searchTerm.toLowerCase())
                 )
             }
         default:
