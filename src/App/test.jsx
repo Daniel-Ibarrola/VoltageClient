@@ -1,5 +1,10 @@
+import axios from "axios";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi} from "vitest";
 import { actions, stationsReducer} from "./stationsReducer.js";
+import {App} from "./App.jsx";
+
+vi.mock("axios");
 
 const stationOne = {
     name: "Caracol",
@@ -124,3 +129,59 @@ describe("stationsReducer", () => {
         expect(newState).toStrictEqual(expectedState);
     });
 });
+
+
+describe("App", () => {
+    it("succeeds fetching data", async () => {
+        const promise = Promise.resolve({
+            data: stations,
+        });
+        axios.get.mockImplementationOnce(() => promise);
+
+        render(<App />);
+
+        expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
+        await waitFor(async () => await promise);
+
+        expect(screen.queryByText(/Cargando/)).toBeNull();
+        expect(screen.getAllByRole("row").length).toBe(3);
+        expect(screen.queryByText("Caracol")).toBeInTheDocument();
+        expect(screen.queryByText("Tonalapa")).toBeInTheDocument();
+    });
+
+    it("fails fetching data", async () => {
+        const promise = Promise.reject();
+        axios.get.mockImplementationOnce(() => promise);
+
+        render(<App />);
+        expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
+
+        try {
+            await waitFor(async () => await promise);
+        } catch (error) {
+            expect(screen.queryByText(/Cargando/)).toBeNull();
+            expect(screen.queryByText(/No se pudo cargar/)).toBeInTheDocument();
+        }
+    });
+
+    it("searches for a specific station", async () => {
+        const promise = Promise.resolve({
+            data: stations,
+        });
+        axios.get.mockImplementationOnce(() => promise);
+
+        render(<App />);
+
+        expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
+        await waitFor(async () => await promise);
+
+        fireEvent.change(screen.getByRole("textbox"), {
+            target: {value: "Caracol"},
+        });
+        fireEvent.submit(screen.queryByText("Buscar"));
+
+        expect(screen.queryByText("Caracol")).toBeInTheDocument();
+        expect(screen.queryByText("Tonalapa")).toBeNull();
+        expect(screen.getAllByRole("row").length).toBe(2);
+    })
+})

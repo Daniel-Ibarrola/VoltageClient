@@ -10,7 +10,7 @@ import { SearchForm } from "../SearchForm/index.js";
 
 const baseUrl = "http://localhost:5000/api/v1"
 const lastReportsURL = baseUrl + "/lastreports"
-const fetchTime = 3600000  // One hour
+const fetchTime = 3600 * 1000  // One hour
 
 const initialStations =  Object.values(stations).map(st => (
     {
