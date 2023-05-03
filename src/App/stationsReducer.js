@@ -17,7 +17,7 @@ export const stationsReducer = (state, action) => {
                 isError: false,
             };
         case actions.successFetch:
-            action.payload.sort((a, b) => a.name > b.name);
+            // action.payload.sort((a, b) => a.name > b.name);
             return  {
                 ...state,
                 isLoading: false,
@@ -31,7 +31,7 @@ export const stationsReducer = (state, action) => {
             return {
                 ...state,
                 isLoading: false,
-                isAxiosError: true,
+                isError: true,
             }
         case actions.setSearch:
             return {
