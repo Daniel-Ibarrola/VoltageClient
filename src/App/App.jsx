@@ -2,71 +2,11 @@ import axios from "axios";
 import * as React from "react";
 
 import './App.css'
-import {actions, stationsReducer} from "./stationsReducer.js";
-import stations from "./stations.js";
+import { actions, stationsReducer } from "./stationsReducer.js";
+import stations from "../shared/stations.js";
+import { Table } from "../Table/index.js";
+import { SearchForm } from "../SearchForm/index.js";
 
-
-const lastReportTime = (dateStr) => {
-    if (dateStr === null){
-        return "-";
-    }
-    const date = new Date(dateStr);
-    if (date <= 1) {return "Hace unos minutos";}
-    if (date < 6) {return "Hace menos de 6 hrs";}
-    if (date < 12) {return "Hace menos de 12 hrs";}
-    if (date < 24) {return "Hace menos de 24 horas";}
-    else {return "Hace más de 24 hrs";}
-};
-
-const roundVoltage = (voltage) => {
-    if (voltage === null){
-        return "-";
-    }
-    return voltage.toFixed(2);
-};
-
-const Table = ({ data }) => {
-    return (
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Estación</th>
-                        <th scope="col">Último Reporte</th>
-                        <th scope="col">Batería</th>
-                        <th scope="col">Panel</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map(st => (
-                        <tr key={st.name}>
-                            <td>{stations[st.name]}</td>
-                            <td>{lastReportTime(st.date)}</td>
-                            <td>{roundVoltage(st.battery)}</td>
-                            <td>{roundVoltage(st.panel)}</td>
-                            <td></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    )
-};
-
-const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit}) => {
-    return (
-        <form onSubmit={onSearchSubmit}>
-            <input
-                id="search"
-                type="text"
-                value={searchTerm}
-                autoFocus={true}
-                onChange={onSearchInput}
-            />
-            <button type="submit">Buscar</button>
-        </form>
-    )
-};
 
 const baseUrl = "http://localhost:5000/api/v1"
 const lastReportsURL = baseUrl + "/lastreports"
@@ -106,7 +46,7 @@ const App = () => {
             dispatchStations({ type: actions.failFetch });
         }
     }
-    
+
     React.useEffect( () => {
         fetchLastReports();
         const interval = setInterval(() => {
@@ -146,4 +86,4 @@ const App = () => {
     );
 }
 
-export default App;
+export { App };
