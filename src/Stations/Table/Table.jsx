@@ -1,4 +1,4 @@
-import station_names from "../shared/station_names.js";
+import station_names from "../../shared/station_names.js";
 import * as React from "react";
 import { lastReportTime, roundVoltage} from "./parse.js";
 

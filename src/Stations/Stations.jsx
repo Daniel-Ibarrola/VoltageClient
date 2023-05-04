@@ -4,8 +4,8 @@ import * as React from "react";
 import './style.css'
 import { actions, stationsReducer } from "./stationsReducer.js";
 import station_names from "../shared/station_names.js";
-import { Table } from "../Table/index.js";
-import { SearchForm } from "../SearchForm/index.js";
+import { Table } from "./Table/index.js";
+import { SearchForm } from "./SearchForm/index.js";
 
 
 const baseUrl = "http://localhost:5000/api/v1"
