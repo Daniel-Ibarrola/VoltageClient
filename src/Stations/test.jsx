@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BrowserRouter } from "react-router-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi} from "vitest";
 import { actions, stationsReducer} from "./stationsReducer.js";
@@ -138,7 +139,7 @@ describe("Stations", () => {
         });
         axios.get.mockImplementationOnce(() => promise);
 
-        render(<Stations />);
+        render(<BrowserRouter><Stations /></BrowserRouter>);
 
         expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
         await waitFor(async () => await promise);
@@ -153,7 +154,7 @@ describe("Stations", () => {
         const promise = Promise.reject();
         axios.get.mockImplementationOnce(() => promise);
 
-        render(<Stations />);
+        render(<BrowserRouter><Stations /></BrowserRouter>);
         expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
 
         try {
@@ -170,7 +171,7 @@ describe("Stations", () => {
         });
         axios.get.mockImplementationOnce(() => promise);
 
-        render(<Stations />);
+        render(<BrowserRouter><Stations /></BrowserRouter>);
 
         expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
         await waitFor(async () => await promise);
@@ -184,4 +185,4 @@ describe("Stations", () => {
         expect(screen.queryByText("Tonalapa")).toBeNull();
         expect(screen.getAllByRole("row").length).toBe(2);
     })
-})
+});

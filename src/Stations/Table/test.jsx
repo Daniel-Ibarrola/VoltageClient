@@ -1,3 +1,4 @@
+import { BrowserRouter } from "react-router-dom";
 import { expect, describe, it } from "vitest";
 import {render, screen} from "@testing-library/react";
 import { Table } from "./Table.jsx";
@@ -72,7 +73,7 @@ describe("Table", () => {
     };
 
    it("renders all data", () => {
-       render(<Table {...props}/>);
+       render(<BrowserRouter><Table {...props}/></BrowserRouter> );
        // One row for the header + 2 of data
        expect(screen.getAllByRole("row").length).toBe(3);
        expect(screen.queryByText("Caracol")).toBeInTheDocument();

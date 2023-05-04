@@ -1,6 +1,8 @@
-import station_names from "../../shared/station_names.js";
 import * as React from "react";
+import station_names from "../../shared/station_names.js";
 import { lastReportTime, roundVoltage} from "./parse.js";
+import { Link } from "react-router-dom";
+
 
 const Table = ({ data }) => {
     return (
@@ -17,7 +19,9 @@ const Table = ({ data }) => {
                 <tbody>
                 {data.map(st => (
                     <tr key={st.name}>
-                        <td>{station_names[st.name]}</td>
+                        <td>
+                            <Link to={`/stations/${st.name}`}>{station_names[st.name]}</Link>
+                        </td>
                         <td>{lastReportTime(st.date)}</td>
                         <td>{roundVoltage(st.battery)}</td>
                         <td>{roundVoltage(st.panel)}</td>
