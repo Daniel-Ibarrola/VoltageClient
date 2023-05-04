@@ -1,4 +1,4 @@
-import stations from "../shared/stations.js";
+import station_names from "../shared/station_names.js";
 import * as React from "react";
 import { lastReportTime, roundVoltage} from "./parse.js";
 
@@ -17,7 +17,7 @@ const Table = ({ data }) => {
                 <tbody>
                 {data.map(st => (
                     <tr key={st.name}>
-                        <td>{stations[st.name]}</td>
+                        <td>{station_names[st.name]}</td>
                         <td>{lastReportTime(st.date)}</td>
                         <td>{roundVoltage(st.battery)}</td>
                         <td>{roundVoltage(st.panel)}</td>

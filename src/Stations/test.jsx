@@ -2,7 +2,7 @@ import axios from "axios";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi} from "vitest";
 import { actions, stationsReducer} from "./stationsReducer.js";
-import {App} from "./App.jsx";
+import { Stations } from "./Stations.jsx";
 
 vi.mock("axios");
 
@@ -131,14 +131,14 @@ describe("stationsReducer", () => {
 });
 
 
-describe("App", () => {
+describe("Stations", () => {
     it("succeeds fetching data", async () => {
         const promise = Promise.resolve({
             data: stations,
         });
         axios.get.mockImplementationOnce(() => promise);
 
-        render(<App />);
+        render(<Stations />);
 
         expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
         await waitFor(async () => await promise);
@@ -153,7 +153,7 @@ describe("App", () => {
         const promise = Promise.reject();
         axios.get.mockImplementationOnce(() => promise);
 
-        render(<App />);
+        render(<Stations />);
         expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
 
         try {
@@ -170,7 +170,7 @@ describe("App", () => {
         });
         axios.get.mockImplementationOnce(() => promise);
 
-        render(<App />);
+        render(<Stations />);
 
         expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
         await waitFor(async () => await promise);

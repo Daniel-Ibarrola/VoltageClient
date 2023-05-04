@@ -1,4 +1,4 @@
-const stations = {
+const station_names = {
     'Acatlan': 'Acatlán',
     'AguaCaliente': 'Agua Caliente',
     'Almoyola': 'Almoyola',
@@ -96,4 +96,4 @@ const stations = {
     'Zihuatanejo': 'Zihuatanejo'
 };
 
-export default stations;
+export default station_names;
