@@ -3,8 +3,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import station_names from "../shared/station_names.js";
 import { actions, stationDataReducer } from "./stationReducer.js";
-import { Chart } from "./Chart.jsx";
-import { Statistics } from "./Statistics.jsx";
+import { Chart } from "./Chart/index.js";
+import { Statistics } from "./Statistics/index.js";
 
 
 const baseUrl = "http://localhost:5000/api/v1";
@@ -71,7 +71,8 @@ const Station = () => {
                     <h1>{stationData.name}</h1>
                     {stationData.isError && <p>Error: No se pudo cargar los últimos datos</p>}
                     {stationData.isLoading && <p>Cargando los últimos datos</p>}
-                    {(!stationData.isLoading && !stationData.isError) && (
+                    {(stationData.voltages.length > 0 && stationData.reports.length > 0)
+                        && (
                         <>
                             <Chart data={stationData.voltages} />
                             <Chart data={stationData.reports} />
