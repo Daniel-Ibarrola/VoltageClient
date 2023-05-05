@@ -12,6 +12,14 @@ const stationsUrl = baseUrl + "/stations/"
 // const lastReportUrl = baseUrl + "/lastreports/"
 const reportCountUrl = baseUrl + "/reportcount/"
 
+
+const getPrettyName = (stationName) => {
+    if (Object.hasOwn(station_names, stationName)){
+        return station_names[stationName];
+    }
+    return "";
+}
+
 const Station = () => {
     const { stationName } = useParams();
     const [stationData, dispatchStationData] = React.useReducer(
@@ -21,13 +29,9 @@ const Station = () => {
             reports: [],
             isLoading: false,
             isError: false,
+            name: getPrettyName(stationName),
         }
     )
-
-    let prettyName = "";
-    if (Object.hasOwn(station_names, stationName)){
-        prettyName = station_names[stationName];
-    }
 
     const getRequest = async (url, action) => {
         const result = await axios.get(url);
@@ -54,15 +58,17 @@ const Station = () => {
     }
 
     React.useEffect(() => {
-        fetchStationData();
+        if (stationData.name){
+            fetchStationData();
+        }
     }, []);
 
     return (
         <div>
-            {prettyName !== ""
+            {stationData.name !== ""
                 ?
                 (<div>
-                    <h1>{prettyName}</h1>
+                    <h1>{stationData.name}</h1>
                     {stationData.isError && <p>Error: No se pudo cargar los últimos datos</p>}
                     {stationData.isLoading && <p>Cargando los últimos datos</p>}
                     {(!stationData.isLoading && !stationData.isError) && (
@@ -74,7 +80,7 @@ const Station = () => {
                     )}
                 </div>)
                 :
-                <h1>Estación invalida</h1>
+                <h1>Estación Invalida</h1>
             }
         </div>
     );

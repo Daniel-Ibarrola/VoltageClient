@@ -39,17 +39,22 @@ const reports = [
 
 describe("Station", () => {
     it("Displays error in case of invalid station parameter", () => {
-        useParams.mockImplementationOnce(() => "EstacionDesconocida");
+        useParams.mockImplementation(() => ({
+            stationName: "EstacionDesconocida",
+        }));
         render(<Station />);
-        expect(screen.queryByText("Estación Invalida")).toBeInTheDocument();
+        expect(screen.queryByText(/Invalida/)).toBeInTheDocument();
     });
 
     it("Fails fetching data",  async () => {
        const promise = Promise.reject();
        axios.get.mockImplementation(() => promise);
-       useParams.mockImplementationOnce(() => "Tonalapa");
+       useParams.mockImplementation(() => ({
+           stationName: "Tonalapa",
+       }));
 
        render(<Station />);
+       screen.debug();
        expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
 
        try {
@@ -71,7 +76,9 @@ describe("Station", () => {
                 return reportsPromise;
             throw Error();
         });
-        useParams.mockImplementationOnce(() => "Tonalapa");
+        useParams.mockImplementation(() => ({
+            stationName: "Tonalapa",
+        }));
 
         render(<Station />);
         expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
@@ -109,6 +116,7 @@ describe("stationDataReducer", () => {
             reports: [],
             isLoading: false,
             isError: false,
+            name: "Tonalapa"
         };
 
         const newState = stationDataReducer(state, action);
@@ -117,6 +125,7 @@ describe("stationDataReducer", () => {
             reports: [],
             isLoading: true,
             isError: false,
+            name: "Tonalapa"
         }
         expect(newState).toStrictEqual(expectedState);
     });
@@ -131,6 +140,7 @@ describe("stationDataReducer", () => {
             reports: [],
             isLoading: true,
             isError: false,
+            name: "Tonalapa"
         }
 
         const newState = stationDataReducer(state, action);
@@ -139,6 +149,7 @@ describe("stationDataReducer", () => {
             reports: [],
             isLoading: false,
             isError: false,
+            name: "Tonalapa"
         }
         expect(newState).toStrictEqual(expectedState);
     });
@@ -153,6 +164,7 @@ describe("stationDataReducer", () => {
             reports: [],
             isLoading: true,
             isError: false,
+            name: "Tonalapa"
         }
 
         const newState = stationDataReducer(state, action);
@@ -161,6 +173,7 @@ describe("stationDataReducer", () => {
             reports: reports,
             isLoading: false,
             isError: false,
+            name: "Tonalapa"
         }
         expect(newState).toStrictEqual(expectedState);
     });
@@ -168,20 +181,20 @@ describe("stationDataReducer", () => {
     it("sets error state on fetch fail", () => {
         const action = { type: actions.failFetch };
         const state = {
-            data: [],
-            display: [],
+            voltages: [],
+            reports: [],
             isLoading: true,
             isError: false,
-            searchTerm: "",
+            name: "Tonalapa"
         };
 
         const newState = stationDataReducer(state, action);
         const expectedState = {
-            data: [],
-            display: [],
+            voltages: [],
+            reports: [],
             isLoading: false,
             isError: true,
-            searchTerm: "",
+            name: "Tonalapa"
         }
         expect(newState).toStrictEqual(expectedState);
     });
