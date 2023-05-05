@@ -8,9 +8,9 @@ import { Table } from "./Table/index.js";
 import { SearchForm } from "./SearchForm/index.js";
 
 
-const baseUrl = "http://localhost:5000/api/v1"
-const lastReportsURL = baseUrl + "/lastreports"
-const fetchTime = 3600 * 1000  // One hour
+const baseUrl = "http://localhost:5000/api/v1";
+const lastReportsURL = baseUrl + "/lastreports";
+const fetchTime = 3600 * 1000;  // One hour
 
 const initialStations =  Object.values(station_names).map(st => (
     {
@@ -73,7 +73,7 @@ const Stations = () => {
         <div>
             <h1>Monitor de Estaciones</h1>
 
-            {stations.isError && <p>No se pudo cargar los últimos datos</p>}
+            {stations.isError && <p>Error: No se pudo cargar los últimos datos</p>}
             {stations.isLoading && <p>Cargando los útlimos datos</p>}
 
             <SearchForm
