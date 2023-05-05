@@ -65,6 +65,22 @@ describe("Station", () => {
     });
 
     it("Fetchs data and displays statistics and charts", async () => {
+
+        // Must mock resize and intersection observer for charts to work
+        window.ResizeObserver = function () {
+            return {
+                observe: vi.fn(),
+                unobserve: vi.fn(),
+                disconnect: vi.fn(),
+            };
+        };
+        window.IntersectionObserver =  function() {
+            return {
+                observe: vi.fn(),
+                disconnect: vi.fn(),
+            };
+        };
+
         const voltagePromise = Promise.resolve({data: reports});
         const reportsPromise = Promise.resolve({data: voltages})
 

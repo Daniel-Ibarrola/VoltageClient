@@ -3,7 +3,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import station_names from "../shared/station_names.js";
 import { actions, stationDataReducer } from "./stationReducer.js";
-import { Chart } from "./Chart/index.js";
+import { VoltageChart } from "./Chart/index.js";
+import { ReportsChart } from "./Chart/index.js";
 import { Statistics } from "./Statistics/index.js";
 
 
@@ -74,8 +75,8 @@ const Station = () => {
                     {(stationData.voltages.length > 0 && stationData.reports.length > 0)
                         && (
                         <>
-                            <Chart data={stationData.voltages} />
-                            <Chart data={stationData.reports} />
+                            <VoltageChart voltages={stationData.voltages} />
+                            <ReportsChart reports={stationData.reports} />
                             <Statistics data={stationData.voltages} />
                         </>
                     )}
