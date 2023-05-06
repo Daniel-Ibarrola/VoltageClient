@@ -102,6 +102,7 @@ describe("Station", () => {
 
         // After fetching the data the statistics part should render
         // using the data just fetched.
+        // screen.debug();
 
         // The date of the last report should appear
         expect(screen.queryByText(/31 de marzo/)).toBeInTheDocument();
@@ -115,10 +116,9 @@ describe("Station", () => {
         // report date was more than a day ago
         // expect(screen.queryByText(/Revisar/)).toBeInTheDocument()
 
-        // A chart with title reports should appear
-        expect(screen.queryByText(/Reportes/)).toBeInTheDocument();
-        // A chart with title voltages should appear
-        expect(screen.queryByText(/Voltajes/)).toBeInTheDocument();
+        // Two charts should be rendered. One for the voltages and the
+        // other for the reports
+        expect(screen.queryAllByRole("img").length).toBe(2);
     });
 });
 

@@ -1,10 +1,22 @@
+import { Scatter } from "react-chartjs-2";
+import {getReportDataForPlot} from "./plotData.js";
 
 
-const ReportsChart = () => {
+const ReportsChart = ({ reports }) => {
+
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: true,
+            },
+        },
+    };
+    const data = getReportDataForPlot(reports);
+
     return(
-        <>
-            <p>Reports chart</p>
-        </>
+        <div>
+            <Scatter data={data} options={options}/>
+        </div>
     );
 };
 
