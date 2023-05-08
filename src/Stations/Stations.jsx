@@ -2,7 +2,6 @@ import axios from "axios";
 import * as React from "react";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
-import Navbar from "react-bootstrap/Navbar";
 import Row from "react-bootstrap/Row";
 
 import './style.css'
@@ -75,19 +74,6 @@ const Stations = () => {
     // TODO: add load spinners
     return (
         <>
-            <Navbar bg="dark">
-                <Container>
-                    <Navbar.Brand className="navbar">
-                              <img
-                                  alt=""
-                                  src="../../public/vite.svg"
-                                  width="30"
-                                  height="30"
-                                  className="d-inline-block align-top"
-                              /> Monitor de Estaciones
-                    </Navbar.Brand>
-                </Container>
-            </Navbar>
             <Container>
                 <Row>
                     <Col>

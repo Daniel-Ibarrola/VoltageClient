@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { Statistics } from "./Statistics.jsx"
 import {
-    Statistics,
     getDataMin,
     getDataMax,
     getLastDate,
-} from "./Statistics.jsx";
+} from "./calc.js";
 
 
 const data = [
@@ -55,6 +55,6 @@ describe("getMaxVoltage",() => {
 
 describe("getLastDate",() => {
     it("Computes last date correctly", () => {
-        expect(getLastDate(data)).toBe("viernes, 31 de marzo de 2023, 12:00:00");
+        expect(getLastDate(data)).toBe("Viernes, 31 de marzo de 2023, 12:00:00");
     });
 });

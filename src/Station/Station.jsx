@@ -1,11 +1,16 @@
 import * as React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+
 import station_names from "../shared/station_names.js";
 import { actions, stationDataReducer } from "./stationReducer.js";
 import { VoltageChart } from "./Chart/index.js";
 import { ReportsChart } from "./Chart/index.js";
 import { Statistics } from "./Statistics/index.js";
+import "./style.css"
 
 
 const baseUrl = "http://localhost:5000/api/v1";
@@ -66,26 +71,43 @@ const Station = () => {
 
     // TODO: Add option to change date range
     return (
-        <div>
+        <Container>
             {stationData.name !== ""
                 ?
-                (<div>
-                    <h1>{stationData.name}</h1>
+                (<>
+                    <Row md={1}>
+                        <Col>
+                            <h1>{stationData.name}</h1>
+                        </Col>
+                    </Row>
+
                     {stationData.isError && <p>Error: No se pudo cargar los últimos datos</p>}
                     {stationData.isLoading && <p>Cargando los últimos datos</p>}
                     {(stationData.voltages.length > 0 && stationData.reports.length > 0)
                         && (
                         <>
-                            <VoltageChart voltages={stationData.voltages} />
-                            <ReportsChart reports={stationData.reports} />
-                            <Statistics data={stationData.voltages} />
+                            <Row >
+                                <Col>
+                                    <VoltageChart voltages={stationData.voltages} />
+                                </Col>
+                            </Row>
+                            <Row >
+                                <Col>
+                                    <ReportsChart reports={stationData.reports} />
+                                </Col>
+                            </Row>
+                            <Row className="justify-content-center">
+                                <Col md={{ span: 4}}>
+                                    <Statistics data={stationData.voltages} />
+                                </Col>
+                            </Row>
                         </>
                     )}
-                </div>)
+                </>)
                 :
                 <h1>Estación Invalida</h1>
             }
-        </div>
+        </Container>
     );
 };
 
