@@ -33,4 +33,4 @@ const Statistics = ({ data }) => {
     )
 };
 
-export { Statistics, getDataMin, getDataMax, getLastDate };
+export { Statistics };

@@ -9,7 +9,9 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import Card from "react-bootstrap/Card";
 import { getVoltageDataForPlot } from "./plotData.js";
+import "./style.css"
 
 
 ChartJS.register(
@@ -28,23 +30,41 @@ const VoltageChart = ({ voltages }) => {
         responsive: true,
         plugins: {
             legend: {
-                position: 'top',
+                position: 'bottom',
             },
             title: {
                 display: true,
-                // TODO: add date-range to title
-                text: 'Voltajes',
             },
         },
+        scales: {
+            x: {
+                grid: {
+                    display: false
+                }
+            },
+            y: {
+                grid: {
+                    display: false
+                }
+            }
+        }
     };
 
+    // TODO: add date-range to title
+
     return (
-        <div>
-            <Line
-                data={data}
-                options={options}
-            />
-        </div>
+        <>
+            <Card className="chart-card">
+                <Card.Title className="align-self-center">Voltajes</Card.Title>
+                <Card.Subtitle className="align-self-center">31/03/2023 - 30/04/2023</Card.Subtitle>
+                <Line
+                    data={data}
+                    options={options}
+                    className="chart"
+                />
+            </Card>
+
+        </>
     )
 };
 
