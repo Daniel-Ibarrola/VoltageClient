@@ -3,6 +3,11 @@ import { Route, Routes } from "react-router-dom";
 import { Stations } from "./Stations/index.js";
 import { Station } from "./Station/index.js";
 
+const NoMatch = () => {
+    return <h1>Aqui no hay nada: 404</h1>
+}
+
+
 const App = () => {
     return (
         <>
@@ -15,11 +20,6 @@ const App = () => {
         </>
     );
 };
-
-
-const NoMatch = () => {
-    return <h1>Aqui no hay nada: 404</h1>
-}
 
 
 export { App };

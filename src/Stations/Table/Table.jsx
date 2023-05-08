@@ -1,4 +1,6 @@
 import * as React from "react";
+import RBTable from "react-bootstrap/Table"
+
 import station_names from "../../shared/station_names.js";
 import { lastReportTime, roundVoltage} from "./parse.js";
 import { Link } from "react-router-dom";
@@ -6,8 +8,7 @@ import { Link } from "react-router-dom";
 
 const Table = ({ data }) => {
     return (
-        <div>
-            <table>
+        <RBTable striped hover>
                 <thead>
                 <tr>
                     <th scope="col">Estación</th>
@@ -25,12 +26,10 @@ const Table = ({ data }) => {
                         <td>{lastReportTime(st.date)}</td>
                         <td>{roundVoltage(st.battery)}</td>
                         <td>{roundVoltage(st.panel)}</td>
-                        <td></td>
                     </tr>
                 ))}
                 </tbody>
-            </table>
-        </div>
+        </RBTable>
     )
 };
 

@@ -1,5 +1,9 @@
 import axios from "axios";
 import * as React from "react";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Navbar from "react-bootstrap/Navbar";
+import Row from "react-bootstrap/Row";
 
 import './style.css'
 import { actions, stationsReducer } from "./stationsReducer.js";
@@ -68,21 +72,46 @@ const Stations = () => {
         event.preventDefault();
     }
 
+    // TODO: add load spinners
     return (
-        // TODO: add navbar
-        <div>
-            <h1>Monitor de Estaciones</h1>
+        <>
+            <Navbar bg="dark">
+                <Container>
+                    <Navbar.Brand className="navbar">
+                              <img
+                                  alt=""
+                                  src="../../public/vite.svg"
+                                  width="30"
+                                  height="30"
+                                  className="d-inline-block align-top"
+                              /> Monitor de Estaciones
+                    </Navbar.Brand>
+                </Container>
+            </Navbar>
+            <Container>
+                <Row>
+                    <Col>
+                        <h1>Estaciones</h1>
+                    </Col>
+                </Row>
 
-            {stations.isError && <p>Error: No se pudo cargar los últimos datos</p>}
-            {stations.isLoading && <p>Cargando los útlimos datos</p>}
+                {stations.isError && <p>Error: No se pudo cargar los últimos datos</p>}
+                {stations.isLoading && <p>Cargando los útlimos datos</p>}
 
-            <SearchForm
-                searchTerm={stations.searchTerm}
-                onSearchInput={handleSearchInput}
-                onSearchSubmit={handleSearchSubmit}
-            />
-            <Table data={stations.display}/>
-        </div>
+                <SearchForm
+                    searchTerm={stations.searchTerm}
+                    onSearchInput={handleSearchInput}
+                    onSearchSubmit={handleSearchSubmit}
+                />
+
+                <Row>
+                    <Col>
+                        <Table data={stations.display}/>
+                    </Col>
+                </Row>
+            </Container>
+        </>
+
     );
 }
 
