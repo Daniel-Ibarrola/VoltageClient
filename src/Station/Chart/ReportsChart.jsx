@@ -3,7 +3,7 @@ import {getReportDataForPlot} from "./plotData.js";
 
 
 const ReportsChart = ({ reports }) => {
-
+    // TODO: Add title
     const options = {
         scales: {
             y: {

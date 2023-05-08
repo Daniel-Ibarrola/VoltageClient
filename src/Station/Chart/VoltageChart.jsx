@@ -32,6 +32,7 @@ const VoltageChart = ({ voltages }) => {
             },
             title: {
                 display: true,
+                // TODO: add date-range to title
                 text: 'Voltajes',
             },
         },
