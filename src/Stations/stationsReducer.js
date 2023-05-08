@@ -3,7 +3,6 @@ export const actions = {
     initFetch: "initFetch",
     successFetch: "successFetch",
     failFetch: "failFetch",
-    setSearch: "setSearch",
     search: "search",
 }
 
@@ -24,7 +23,9 @@ export const stationsReducer = (state, action) => {
                 isError: false,
                 data: action.payload,
                 display: action.payload.filter(
-                    st => st.name.toLowerCase().includes(state.searchTerm.toLowerCase())
+                    st => st.name.toLowerCase().includes(
+                        state.searchTerm.replace(/\s/g, "").toLowerCase()
+                    )
                 )
             }
         case actions.failFetch:
@@ -33,18 +34,17 @@ export const stationsReducer = (state, action) => {
                 isLoading: false,
                 isError: true,
             }
-        case actions.setSearch:
+        case actions.search: {
             return {
                 ...state,
                 searchTerm: action.payload,
-            }
-        case actions.search:
-            return {
-                ...state,
                 display: state.data.filter(
-                    st => st.name.toLowerCase().includes(state.searchTerm.toLowerCase())
+                    st => st.name.toLowerCase().includes(
+                        action.payload.replace(/\s/g, "").toLowerCase()
+                    )
                 )
             }
+        }
         default:
             throw new Error();
     }

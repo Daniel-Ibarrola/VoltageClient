@@ -88,35 +88,14 @@ describe("stationsReducer", () => {
         expect(newState).toStrictEqual(expectedState);
     });
 
-    it("sets search term", () => {
-        const action = { type: actions.setSearch, payload: "Caracol" };
-        const state = {
-            data: stations,
-            display: stations,
-            isLoading: false,
-            isError: false,
-            searchTerm: "",
-        };
-
-        const newState = stationsReducer(state, action);
-        const expectedState = {
-            data: stations,
-            display: stations,
-            isLoading: false,
-            isError: false,
-            searchTerm: "Caracol",
-        }
-        expect(newState).toStrictEqual(expectedState);
-    });
-
     it("search updates displayed data", () => {
-        const action = { type: actions.search };
+        const action = { type: actions.search, payload: "Caracol" };
         const state = {
             data: stations,
             display: [],
             isLoading: false,
             isError: false,
-            searchTerm: "Caracol",
+            searchTerm: "",
         };
 
         const newState = stationsReducer(state, action);
@@ -179,7 +158,6 @@ describe("Stations", () => {
         fireEvent.change(screen.getByRole("textbox"), {
             target: {value: "Caracol"},
         });
-        fireEvent.submit(screen.queryByText("Buscar"));
 
         expect(screen.queryByText("Caracol")).toBeInTheDocument();
         expect(screen.queryByText("Tonalapa")).toBeNull();

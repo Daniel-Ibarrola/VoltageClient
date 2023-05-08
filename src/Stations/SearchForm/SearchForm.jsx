@@ -1,14 +1,13 @@
 import * as React from "react";
-import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import "./style.css"
 
-const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit}) => {
-    // TODO: remove button
+const SearchForm = ({ searchTerm, onSearchInput}) => {
+    // TODO: Add search icon
     return (
-        <Form onSubmit={onSearchSubmit} className="search-form">
+        <Form className="search-form">
             <Row>
                 <Col>
                     <Form.Control
@@ -19,11 +18,6 @@ const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit}) => {
                         autoFocus={true}
                         onChange={onSearchInput}
                     />
-                </Col>
-                <Col>
-                    <Button variant="primary" type="submit" size="md">
-                        Buscar
-                    </Button>
                 </Col>
             </Row>
         </Form>

@@ -61,15 +61,10 @@ const Stations = () => {
 
     const handleSearchInput = (event) => {
         dispatchStations({
-            type: actions.setSearch,
-            payload: event.target.value
+            type: actions.search,
+            payload: event.target.value,
         });
     };
-
-    const handleSearchSubmit = (event) => {
-        dispatchStations({type: actions.search});
-        event.preventDefault();
-    }
 
     // TODO: add load spinners
     return (
@@ -87,7 +82,6 @@ const Stations = () => {
                 <SearchForm
                     searchTerm={stations.searchTerm}
                     onSearchInput={handleSearchInput}
-                    onSearchSubmit={handleSearchSubmit}
                 />
 
                 <Row>

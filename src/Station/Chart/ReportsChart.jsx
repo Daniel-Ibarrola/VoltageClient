@@ -5,7 +5,6 @@ import {getReportDataForPlot} from "./plotData.js";
 import "./style.css"
 
 const ReportsChart = ({ reports }) => {
-    // TODO: Add title
     const options = {
         scales: {
             y: {
