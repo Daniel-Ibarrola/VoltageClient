@@ -33,13 +33,14 @@ const NavBar = () => {
 
 
 const App = () => {
+    const fetchTime = 3600 * 1000;  // One hour
     return (
         <>
             <NavBar />
             <Routes>
-                <Route index element={<Stations />} />
-                <Route path="stations" element={<Stations />} />
-                <Route path="stations/:stationName" element={<Station />} />
+                <Route index element={<Stations fetchTime={fetchTime} />} />
+                <Route path="stations" element={<Stations fetchTime={fetchTime}/>} />
+                <Route path="stations/:stationName" element={<Station fetchTime={fetchTime} />} />
                 <Route path="*" element={<NoMatch />} />
             </Routes>
         </>

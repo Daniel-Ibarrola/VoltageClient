@@ -13,8 +13,6 @@ import { lastReportsUrl } from "../shared/index.js";
 import { LoadSpinner, FailAlert } from "../shared/index.js";
 
 
-const fetchTime = 3600 * 1000;  // One hour
-
 const initialStations =  Object.values(station_names).map(st => (
     {
         name: st,
@@ -24,7 +22,7 @@ const initialStations =  Object.values(station_names).map(st => (
     }
 ));
 
-const Stations = () => {
+const Stations = ({ fetchTime }) => {
 
     const [stations, dispatchStations] = React.useReducer(
         stationsReducer,
