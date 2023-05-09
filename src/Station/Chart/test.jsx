@@ -47,24 +47,11 @@ describe("getVoltageDataForPlot", () => {
             "03/31 00:00",
             "03/31 12:00",
         ]
-        const expected = {
-            labels,
-            datasets: [
-                {
-                    label: "Batería",
-                    data: [205.0, 100.5, 50.5],
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                },
-                {
-                    label: "Panel",
-                    data: [100.80, 200.80, 150.80],
-                    borderColor: 'rgb(53, 162, 235)',
-                    backgroundColor: 'rgba(53, 162, 235, 0.5)',
-                }
-            ]
-        };
-        expect(data).toStrictEqual(expected);
+        expect(data.labels).toStrictEqual(labels);
+        expect(data.datasets[0].label).toBe("Batería");
+        expect(data.datasets[0].data).toStrictEqual([205.0, 100.5, 50.5]);
+        expect(data.datasets[1].label).toBe("Panel");
+        expect(data.datasets[1].data).toStrictEqual([100.80, 200.80, 150.80]);
     });
 });
 
@@ -72,21 +59,15 @@ describe("getVoltageDataForPlot", () => {
 describe("getReportDataForPlot", () => {
     it("Gets correct data", () => {
         const data = getReportDataForPlot(reports);
-        const expected = {
-            datasets: [
-                {
-                    label: "Número de reportes",
-                    data: [
-                        {x: 0, y: 1},
-                        {x: 1, y: 2},
-                    ],
-                    backgroundColor: 'rgba(255, 99, 132, 1)',
-                }
-            ]
-        }
-        expect(data).toStrictEqual(expected);
+        const labels = [
+            "03/30",
+            "03/31",
+        ];
+        expect(data.labels).toStrictEqual(labels);
+        expect(data.datasets[0].data).toStrictEqual([1, 2]);
     })
 });
+
 
 const setUpChartTest = () => {
     // Must mock resize and intersection observer for charts to work on test

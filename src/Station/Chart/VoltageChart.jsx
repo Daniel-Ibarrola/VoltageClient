@@ -1,5 +1,6 @@
 import {
     Chart as ChartJS,
+    Filler,
     CategoryScale,
     LinearScale,
     PointElement,
@@ -21,7 +22,8 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Filler,
 );
 
 const VoltageChart = ({ voltages }) => {
@@ -49,9 +51,6 @@ const VoltageChart = ({ voltages }) => {
             }
         }
     };
-
-    // TODO: add date-range to title
-
     return (
         <>
             <Card className="chart-card">

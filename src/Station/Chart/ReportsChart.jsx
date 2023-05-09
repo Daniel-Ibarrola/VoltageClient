@@ -1,4 +1,4 @@
-import { Scatter } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import Card from "react-bootstrap/Card";
 
 import {getReportDataForPlot, getDateRange} from "./plotData.js";
@@ -32,7 +32,7 @@ const ReportsChart = ({ reports }) => {
             <Card className="chart-card">
                 <Card.Title className="align-self-center">Reportes</Card.Title>
                 <Card.Subtitle className="align-self-center">{getDateRange(reports)}</Card.Subtitle>
-                <Scatter
+                <Line
                     data={data}
                     options={options}
                     className="chart"

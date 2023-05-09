@@ -18,29 +18,37 @@ export const getVoltageDataForPlot = (voltages) => {
             {
                 label: "Batería",
                 data: voltages.map(item => item.battery),
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgb(203, 67, 53)',
+                backgroundColor: 'rgba(203, 67, 53, 0.5)',
             },
             {
                 label: "Panel",
                 data: voltages.map(item => item.panel),
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                borderColor: 'rgb(36, 113, 163)',
+                backgroundColor: 'rgba(36, 113, 163, 0.5)',
             }
         ]
     };
 };
 
 export const getReportDataForPlot = (reports) => {
-    // TODO: Add custom labels
+    const labels = reports
+        .map(item => parseReportDate(item.date))
+        .map(date => {
+            const month = (date.getMonth() + 1).toString().padStart(2, "0");
+            const day = date.getDate().toString().padStart(2, "0");
+            return `${month}/${day}`;
+        });
     return {
+        labels,
         datasets: [
             {
+                fill: true,
                 label: "Número de reportes",
-                data: reports.map((item, index) => (
-                    {x: index, y: item.reports})
-                ),
-                backgroundColor: 'rgba(255, 99, 132, 1)',
+                data: reports.map((item) => (item.reports)),
+                borderColor: 'rgb(40, 180, 99)',
+                backgroundColor: 'rgba(40, 180, 99, 0.2)',
+                stepped: "after",
             }
         ]
     }
