@@ -14,7 +14,7 @@ export const getDataMax = (data, type) => {
 
 export const getLastDate = (data) => {
     const dates = data.map(item => new Date(item.date));
-    const last = dates.reduce((a, b) => a > b ? a : b)
+    const last = dates.reduce((a, b) => a > b ? a : b);
     const dateStr = last.toLocaleDateString("es-MX", {
         weekday: 'long',
         year: 'numeric',

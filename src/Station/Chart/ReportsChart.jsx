@@ -1,7 +1,7 @@
 import { Scatter } from "react-chartjs-2";
 import Card from "react-bootstrap/Card";
 
-import {getReportDataForPlot} from "./plotData.js";
+import {getReportDataForPlot, getDateRange} from "./plotData.js";
 import "./style.css"
 
 const ReportsChart = ({ reports }) => {
@@ -31,7 +31,7 @@ const ReportsChart = ({ reports }) => {
         <>
             <Card className="chart-card">
                 <Card.Title className="align-self-center">Reportes</Card.Title>
-                <Card.Subtitle className="align-self-center">31/03/2023 - 30/04/2023</Card.Subtitle>
+                <Card.Subtitle className="align-self-center">{getDateRange(reports)}</Card.Subtitle>
                 <Scatter
                     data={data}
                     options={options}

@@ -45,3 +45,27 @@ export const getReportDataForPlot = (reports) => {
         ]
     }
 };
+
+const formatDate = (date) => {
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
+export const parseReportDate = (dateStr) => {
+    const pieces = dateStr.split("-");
+    const date = new Date();
+    date.setFullYear(parseInt(pieces[0]));
+    date.setMonth(parseInt(pieces[1]) - 1);
+    date.setDate(parseInt(pieces[2]));
+    return date;
+};
+
+export const getDateRange = (data) => {
+    const dates = data.map(item => parseReportDate(item.date));
+    const first = dates.reduce((a, b) => a < b ? a : b);
+    const last = dates.reduce((a, b) => a > b ? a : b);
+
+    return formatDate(first) + " - " + formatDate(last);
+};
