@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 import station_names from "../shared/station_names.js";
+import { FailAlert, LoadSpinner } from "../shared/components.jsx";
 import { actions, stationDataReducer } from "./stationReducer.js";
 import { VoltageChart } from "./Chart/index.js";
 import { ReportsChart } from "./Chart/index.js";
@@ -81,8 +82,8 @@ const Station = () => {
                         </Col>
                     </Row>
 
-                    {stationData.isError && <p>Error: No se pudo cargar los últimos datos</p>}
-                    {stationData.isLoading && <p>Cargando los últimos datos</p>}
+                    {stationData.isError && <FailAlert />}
+                    {stationData.isLoading && <LoadSpinner />}
                     {(stationData.voltages.length > 0 && stationData.reports.length > 0)
                         && (
                         <>

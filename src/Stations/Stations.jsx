@@ -6,9 +6,10 @@ import Row from "react-bootstrap/Row";
 
 import './style.css'
 import { actions, stationsReducer } from "./stationsReducer.js";
-import station_names from "../shared/station_names.js";
 import { Table } from "./Table/index.js";
 import { SearchForm } from "./SearchForm/index.js";
+import station_names from "../shared/station_names.js";
+import { LoadSpinner, FailAlert } from "../shared/components.jsx";
 
 
 const baseUrl = "http://localhost:5000/api/v1";
@@ -76,8 +77,8 @@ const Stations = () => {
                     </Col>
                 </Row>
 
-                {stations.isError && <p>Error: No se pudo cargar los últimos datos</p>}
-                {stations.isLoading && <p>Cargando los útlimos datos</p>}
+                {stations.isError && <FailAlert />}
+                {stations.isLoading && <LoadSpinner />}
 
                 <SearchForm
                     searchTerm={stations.searchTerm}
