@@ -6,18 +6,13 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 import station_names from "../shared/station_names.js";
+import { reportCountUrl, stationsUrl } from "../shared/api.js";
 import { FailAlert, LoadSpinner } from "../shared/components.jsx";
 import { actions, stationDataReducer } from "./stationReducer.js";
 import { VoltageChart } from "./Chart/index.js";
 import { ReportsChart } from "./Chart/index.js";
 import { Statistics } from "./Statistics/index.js";
 import "./style.css"
-
-
-const baseUrl = "http://localhost:5000/api/v1";
-const stationsUrl = baseUrl + "/stations/"
-// const lastReportUrl = baseUrl + "/lastreports/"
-const reportCountUrl = baseUrl + "/reportcount/"
 
 
 const getPrettyName = (stationName) => {

@@ -9,11 +9,10 @@ import { actions, stationsReducer } from "./stationsReducer.js";
 import { Table } from "./Table/index.js";
 import { SearchForm } from "./SearchForm/index.js";
 import station_names from "../shared/station_names.js";
-import { LoadSpinner, FailAlert } from "../shared/components.jsx";
+import { lastReportsUrl } from "../shared/index.js";
+import { LoadSpinner, FailAlert } from "../shared/index.js";
 
 
-const baseUrl = "http://localhost:5000/api/v1";
-const lastReportsURL = baseUrl + "/lastreports";
 const fetchTime = 3600 * 1000;  // One hour
 
 const initialStations =  Object.values(station_names).map(st => (
@@ -41,7 +40,7 @@ const Stations = () => {
     const fetchLastReports = async () => {
         dispatchStations({type: actions.initFetch});
         try {
-            const result = await axios.get(lastReportsURL);
+            const result = await axios.get(lastReportsUrl);
             dispatchStations({
                 type: actions.successFetch,
                 payload: result.data,
@@ -67,7 +66,6 @@ const Stations = () => {
         });
     };
 
-    // TODO: add load spinners
     return (
         <>
             <Container>
