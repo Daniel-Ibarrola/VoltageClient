@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { Station } from "./Station.jsx";
 import { actions, stationDataReducer } from "./stationReducer.js";
@@ -64,8 +64,7 @@ describe("Station", () => {
        }
     });
 
-    it("Fetchs data and displays statistics and charts", async () => {
-
+    const prepareChartTest = () => {
         // Must mock resize and intersection observer for charts to work
         window.ResizeObserver = function () {
             return {
@@ -80,15 +79,18 @@ describe("Station", () => {
                 disconnect: vi.fn(),
             };
         };
+    };
 
-        const voltagePromise = Promise.resolve({data: reports});
-        const reportsPromise = Promise.resolve({data: voltages})
+    it("Fetches data and displays statistics and charts", async () => {
+        prepareChartTest();
+        const voltagePromise = Promise.resolve({data: voltages});
+        const reportsPromise = Promise.resolve({data: reports})
 
         axios.get.mockImplementation((url) => {
             if (url.includes("reportcount"))
-                return voltagePromise;
-            if (url.includes("station"))
                 return reportsPromise;
+            if (url.includes("station"))
+                return voltagePromise;
             throw Error();
         });
         useParams.mockImplementation(() => ({
@@ -102,7 +104,6 @@ describe("Station", () => {
 
         // After fetching the data the statistics part should render
         // using the data just fetched.
-        // screen.debug();
 
         // The date of the last report should appear
         expect(screen.queryByText(/31 de marzo/)).toBeInTheDocument();
@@ -119,6 +120,46 @@ describe("Station", () => {
         // Two charts should be rendered. One for the voltages and the
         // other for the reports
         expect(screen.queryAllByRole("img").length).toBe(2);
+    });
+
+    it("Fetches data after selecting date range from dropdown", async () => {
+        prepareChartTest();
+        const voltagePromise = Promise.resolve({data: voltages});
+        const reportsPromise = Promise.resolve({data: reports});
+        const voltagePromise2 = Promise.resolve({data: [
+                {
+                    "date": "2023-05-04T00:00:00",
+                    "battery": 100.50,
+                    "panel": 200.80,
+                },
+                {
+                    "date": "2023-05-05T12:00:00",
+                    "battery": 50.50,
+                    "panel": 150.80,
+                }
+            ]})
+
+        axios.get
+            .mockImplementationOnce(() => voltagePromise)
+            .mockImplementationOnce(() => reportsPromise)
+            .mockImplementationOnce(() => voltagePromise2);
+
+        render(<Station />);
+        await waitFor(async () => await voltagePromise);
+        await waitFor(async () => await reportsPromise);
+
+        // Clicking on the dropdown displays items.
+        // The first dropdown will correspond to the voltages
+        await waitFor(async () => fireEvent.click(
+            screen.getAllByRole("button")[0])
+        );
+        // After selecting an item from the dropdown voltage date is fetched again
+        await waitFor(async () => fireEvent.click(
+            screen.getByText("Último mes"))
+        );
+        // The date of the last report should be updated
+        expect(screen.queryByText(/31 de marzo/)).toBeNull();
+        expect(screen.queryByText(/5 de mayo/)).toBeInTheDocument();
     });
 });
 

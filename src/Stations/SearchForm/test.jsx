@@ -2,6 +2,7 @@ import { expect, describe, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { SearchForm } from "./SearchForm.jsx";
 
+
 describe("SearchForm", () => {
     const props = {
         searchTerm: "Tonalapa",

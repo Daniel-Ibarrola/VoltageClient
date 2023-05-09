@@ -4,7 +4,7 @@ const getDateLabel = (date) => {
     const day = date.getDate().toString().padStart(2, "0");
     const hours = date.getHours().toString().padStart(2, "0");
     const min = date.getMinutes().toString().padStart(2, "0");
-    return `${month}/${day} ${hours}:${min}`;
+    return `${day}/${month} ${hours}:${min}`;
 } ;
 
 export const getVoltageDataForPlot = (voltages) => {
@@ -37,7 +37,7 @@ export const getReportDataForPlot = (reports) => {
         .map(date => {
             const month = (date.getMonth() + 1).toString().padStart(2, "0");
             const day = date.getDate().toString().padStart(2, "0");
-            return `${month}/${day}`;
+            return `${day}/${month}`;
         });
     return {
         labels,

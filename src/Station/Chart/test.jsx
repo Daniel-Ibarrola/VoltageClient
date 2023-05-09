@@ -43,9 +43,9 @@ describe("getVoltageDataForPlot", () => {
     it("Gets correct data", () => {
         const data = getVoltageDataForPlot(voltages);
         const labels = [
-            "03/30 12:00",
-            "03/31 00:00",
-            "03/31 12:00",
+            "30/03 12:00",
+            "31/03 00:00",
+            "31/03 12:00",
         ]
         expect(data.labels).toStrictEqual(labels);
         expect(data.datasets[0].label).toBe("Batería");
@@ -60,8 +60,8 @@ describe("getReportDataForPlot", () => {
     it("Gets correct data", () => {
         const data = getReportDataForPlot(reports);
         const labels = [
-            "03/30",
-            "03/31",
+            "30/03",
+            "31/03",
         ];
         expect(data.labels).toStrictEqual(labels);
         expect(data.datasets[0].data).toStrictEqual([1, 2]);
