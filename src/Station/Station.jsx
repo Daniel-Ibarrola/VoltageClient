@@ -7,7 +7,7 @@ import Row from "react-bootstrap/Row";
 
 import station_names from "../shared/station_names.js";
 import { reportCountUrl, stationsUrl } from "../shared/api.js";
-import { FailAlert, LoadSpinner } from "../shared/components.jsx";
+import { FailAlert, LoadSpinner } from "../shared/index.js";
 import { actions, stationDataReducer } from "./stationReducer.js";
 import { VoltageChart } from "./Chart/index.js";
 import { ReportsChart } from "./Chart/index.js";

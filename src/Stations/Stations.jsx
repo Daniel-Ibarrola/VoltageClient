@@ -9,7 +9,7 @@ import { actions, stationsReducer } from "./stationsReducer.js";
 import { Table } from "./Table/index.js";
 import { SearchForm } from "./SearchForm/index.js";
 import station_names from "../shared/station_names.js";
-import { lastReportsUrl } from "../shared/index.js";
+import {lastReportsUrl, Notifications} from "../shared/index.js";
 import { LoadSpinner, FailAlert } from "../shared/index.js";
 
 
@@ -75,6 +75,8 @@ const Stations = ({ fetchTime }) => {
 
                 {stations.isError && <FailAlert />}
                 {stations.isLoading && <LoadSpinner />}
+
+                <Notifications reports={stations.data}/>
 
                 <SearchForm
                     searchTerm={stations.searchTerm}

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BrowserRouter } from "react-router-dom";
-import { act, render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi} from "vitest";
 import { actions, stationsReducer} from "./stationsReducer.js";
 import { Stations } from "./Stations.jsx";
