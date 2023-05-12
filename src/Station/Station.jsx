@@ -11,8 +11,8 @@ import { FailAlert, LoadSpinner } from "../shared/index.js";
 import { actions, stationDataReducer } from "./stationReducer.js";
 import { VoltageChart } from "./Chart/index.js";
 import { ReportsChart } from "./Chart/index.js";
-import { Dropdown } from "./Dropdown/index.js";
 import { Statistics } from "./Statistics/index.js";
+import { getDateWithDelta } from "./getDate.js";
 import "./style.css"
 
 
@@ -36,6 +36,8 @@ const Station = () => {
         }
     )
 
+    const [urlParams, setUrlParams] = React.useState("");
+
     const getRequest = async (url, action) => {
         const result = await axios.get(url);
         dispatchStationData({
@@ -47,8 +49,14 @@ const Station = () => {
     const fetchStationData = async () => {
         dispatchStationData({type: actions.initFetch});
         const requestData = [
-            {action: actions.successFetchStations, url: stationsUrl + stationName},
-            {action: actions.successFetchReportCount, url: reportCountUrl + stationName},
+            {
+                action: actions.successFetchStations,
+                url: stationsUrl + stationName + urlParams
+            },
+            {action:
+                actions.successFetchReportCount,
+                url: reportCountUrl + stationName + urlParams
+            },
         ]
         for (let ii = 0; ii < requestData.length; ii++){
             try {
@@ -64,9 +72,33 @@ const Station = () => {
         if (stationData.name){
             fetchStationData();
         }
-    }, []);
+    }, [urlParams]);
 
-    // TODO: Add option to change date range
+    const handleDateChange = (period) => {
+        const date = new Date(Date.now());
+        const days = 1000 * 3600 * 24; // milliseconds in a day
+        let conversionFactor = days;
+
+        let exit = false;
+        switch (period){
+            case "week":
+                conversionFactor *= 7;
+                break;
+            case "month":
+                conversionFactor *= 30;
+                break;
+            case "year":
+                conversionFactor *= 365;
+                break;
+            default:
+                exit = true;
+        }
+        if (!exit){
+            const startDate = getDateWithDelta(date, conversionFactor);
+            setUrlParams(`?startdate=${startDate}`);
+        }
+    };
+
     return (
         <Container>
             {stationData.name !== ""
@@ -85,7 +117,10 @@ const Station = () => {
                         <>
                             <Row >
                                 <Col>
-                                    <VoltageChart voltages={stationData.voltages} />
+                                    <VoltageChart
+                                        voltages={stationData.voltages}
+                                        onDropDownItemClick={handleDateChange}
+                                    />
                                 </Col>
                             </Row>
                             <Row >

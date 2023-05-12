@@ -4,6 +4,7 @@ import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { Station } from "./Station.jsx";
 import { actions, stationDataReducer } from "./stationReducer.js";
+import { getDateWithDelta } from "./getDate.js";
 
 vi.mock("axios");
 vi.mock("react-router-dom");
@@ -253,5 +254,34 @@ describe("stationDataReducer", () => {
             name: "Tonalapa"
         }
         expect(newState).toStrictEqual(expectedState);
+    });
+});
+
+describe("getDateWithDelta", () => {
+    it("Computes date from a week ago correctly", () => {
+        const date = new Date(2023, 5, 5);
+        const delta = 7 * 24 * 3600 * 1000;
+
+        const aWeekAgo = getDateWithDelta(date, delta);
+        const expected = "2023-05-29";
+        expect(aWeekAgo).toBe(expected);
+    });
+
+    it("Computes date from a month ago correctly", () => {
+        const date = new Date(2023, 5, 12);
+        const delta = 30 * 24 * 3600 * 1000;
+
+        const aMonthAgo = getDateWithDelta(date, delta);
+        const expected = "2023-04-12";
+        expect(aMonthAgo).toBe(expected);
+    });
+
+    it("Computes date from a year ago correctly", () => {
+        const date = new Date(2023, 5, 12);
+        const delta = 365 * 24 * 3600 * 1000;
+
+        const aYearAgo = getDateWithDelta(date, delta);
+        const expected = "2022-05-12";
+        expect(aYearAgo).toBe(expected);
     });
 });

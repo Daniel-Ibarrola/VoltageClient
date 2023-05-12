@@ -10,7 +10,7 @@ describe("DropDown", () => {
             onItemClick: vi.fn(),
         }
 
-       render(<Dropdown />);
+       render(<Dropdown {...props}/>);
        await waitFor(async () => fireEvent.click(
            screen.getByRole("button"))
        );

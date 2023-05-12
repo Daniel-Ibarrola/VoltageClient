@@ -11,7 +11,9 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import Card from "react-bootstrap/Card";
+
 import { getVoltageDataForPlot, getDateRange } from "./plotData.js";
+import { Dropdown } from "../Dropdown/index.js";
 import "./style.css"
 
 
@@ -26,7 +28,7 @@ ChartJS.register(
     Filler,
 );
 
-const VoltageChart = ({ voltages }) => {
+const VoltageChart = ({ voltages, onDropDownItemClick }) => {
     const data = getVoltageDataForPlot(voltages);
     const options = {
         responsive: true,
@@ -61,6 +63,9 @@ const VoltageChart = ({ voltages }) => {
                     options={options}
                     className="chart"
                 />
+                <Card.Body>
+                    <Dropdown onItemClick={onDropDownItemClick}/>
+                </Card.Body>
             </Card>
 
         </>
