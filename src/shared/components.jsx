@@ -12,7 +12,7 @@ export const LoadSpinner = () => {
 export const FailAlert = () => {
     return (
         <Alert key={"failFetch"} variant={"danger"}>
-            Error: No se pudo cargar los últimos datos
+            <strong>Error:</strong> No se pudo cargar los últimos datos
         </Alert>
     )
 }

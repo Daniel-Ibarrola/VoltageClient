@@ -8,27 +8,17 @@ import './style.css'
 import { actions, stationsReducer } from "./stationsReducer.js";
 import { Table } from "./Table/index.js";
 import { SearchForm } from "./SearchForm/index.js";
-import station_names from "../shared/station_names.js";
 import {lastReportsUrl, Notifications} from "../shared/index.js";
 import { LoadSpinner, FailAlert } from "../shared/index.js";
 
-
-const initialStations =  Object.values(station_names).map(st => (
-    {
-        name: st,
-        date: null,
-        battery: null,
-        panel: null,
-    }
-));
 
 const Stations = ({ fetchTime }) => {
 
     const [stations, dispatchStations] = React.useReducer(
         stationsReducer,
         {
-            data: initialStations,
-            display: initialStations,  // This is the data that will be displayed by the table
+            data: [],
+            display: [],  // This is the data that will be displayed by the table
             isLoading: false,
             isError: false,
             searchTerm: "",
