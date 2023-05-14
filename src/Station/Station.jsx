@@ -36,9 +36,10 @@ const Station = () => {
         }
     )
 
+    let initialDate = getDateWithDelta(new Date(Date.now()), 7);
     const [urlParams, setUrlParams] = React.useState({
-        voltages: "",
-        reports: "",
+        voltages: `?startdate=${initialDate}`,
+        reports: `?startdate=${initialDate}`,
     });
 
     const getRequest = async (url, action) => {
