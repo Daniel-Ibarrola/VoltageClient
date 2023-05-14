@@ -36,7 +36,10 @@ const Station = () => {
         }
     )
 
-    const [urlParams, setUrlParams] = React.useState("");
+    const [urlParams, setUrlParams] = React.useState({
+        voltages: "",
+        reports: "",
+    });
 
     const getRequest = async (url, action) => {
         const result = await axios.get(url);
@@ -51,11 +54,11 @@ const Station = () => {
         const requestData = [
             {
                 action: actions.successFetchStations,
-                url: stationsUrl + stationName + urlParams
+                url: stationsUrl + stationName + urlParams.voltages
             },
             {action:
                 actions.successFetchReportCount,
-                url: reportCountUrl + stationName + urlParams
+                url: reportCountUrl + stationName + urlParams.reports
             },
         ]
         for (let ii = 0; ii < requestData.length; ii++){
@@ -74,7 +77,7 @@ const Station = () => {
         }
     }, [urlParams]);
 
-    const handleDateChange = (period) => {
+    const handleDateChange = (period, type) => {
         const date = new Date(Date.now());
         let days = null;
         switch (period){
@@ -92,7 +95,10 @@ const Station = () => {
         }
         if (days !== null){
             const startDate = getDateWithDelta(date, days);
-            setUrlParams(`?startdate=${startDate}`);
+            setUrlParams({
+                ...urlParams,
+                [type]: `?startdate=${startDate}`,
+            });
         }
     };
 
@@ -122,7 +128,10 @@ const Station = () => {
                             </Row>
                             <Row >
                                 <Col>
-                                    <ReportsChart reports={stationData.reports} />
+                                    <ReportsChart
+                                        reports={stationData.reports}
+                                        onDropDownItemClick={handleDateChange}
+                                    />
                                 </Col>
                             </Row>
                             <Row className="justify-content-center">

@@ -2,9 +2,10 @@ import { Line } from "react-chartjs-2";
 import Card from "react-bootstrap/Card";
 
 import {getReportDataForPlot, getDateRange} from "./plotData.js";
+import { Dropdown } from "../Dropdown/index.js";
 import "./style.css"
 
-const ReportsChart = ({ reports }) => {
+const ReportsChart = ({ reports, onDropDownItemClick }) => {
     const options = {
         scales: {
             y: {
@@ -37,6 +38,12 @@ const ReportsChart = ({ reports }) => {
                     options={options}
                     className="chart"
                 />
+                <Card.Body>
+                    <Dropdown
+                        onItemClick={onDropDownItemClick}
+                        type="reports"
+                    />
+                </Card.Body>
             </Card>
         </>
     );

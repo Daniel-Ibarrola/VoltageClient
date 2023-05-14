@@ -64,7 +64,10 @@ const VoltageChart = ({ voltages, onDropDownItemClick }) => {
                     className="chart"
                 />
                 <Card.Body>
-                    <Dropdown onItemClick={onDropDownItemClick}/>
+                    <Dropdown
+                        onItemClick={onDropDownItemClick}
+                        type="voltages"
+                    />
                 </Card.Body>
             </Card>
 

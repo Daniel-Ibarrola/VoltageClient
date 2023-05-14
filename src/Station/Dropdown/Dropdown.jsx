@@ -2,7 +2,7 @@ import RBDropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import "./style.css"
 
-const Dropdown = ({ onItemClick }) => {
+const Dropdown = ({ onItemClick, type }) => {
 
     return (
         <DropdownButton
@@ -10,13 +10,13 @@ const Dropdown = ({ onItemClick }) => {
             id="dropdown-item-button"
             title="Intervalo"
         >
-            <RBDropdown.Item as="button" onClick={() => onItemClick("week")}>
+            <RBDropdown.Item as="button" onClick={() => onItemClick("week", type)}>
                 Última semana
             </RBDropdown.Item>
-            <RBDropdown.Item as="button" onClick={() => onItemClick("month")}>
+            <RBDropdown.Item as="button" onClick={() => onItemClick("month", type)}>
                 Último mes
             </RBDropdown.Item>
-            <RBDropdown.Item as="button" onClick={() => onItemClick("year")}>
+            <RBDropdown.Item as="button" onClick={() => onItemClick("year", type)}>
                 Último año
             </RBDropdown.Item>
         </DropdownButton>
