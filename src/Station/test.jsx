@@ -259,28 +259,34 @@ describe("stationDataReducer", () => {
 
 describe("getDateWithDelta", () => {
     it("Computes date from a week ago correctly", () => {
-        const date = new Date(2023, 5, 5);
-        const delta = 7 * 24 * 3600 * 1000;
+        // In date class month 4 corresponds to May (0 indexed)
+        const date = new Date(2023, 4, 5);
+        const daysDelta = 7;
 
-        const aWeekAgo = getDateWithDelta(date, delta);
-        const expected = "2023-05-29";
+        const aWeekAgo = getDateWithDelta(date, daysDelta);
+        // We expect the month to be April (04)
+        const expected = "2023-04-28";
         expect(aWeekAgo).toBe(expected);
     });
 
     it("Computes date from a month ago correctly", () => {
-        const date = new Date(2023, 5, 12);
-        const delta = 30 * 24 * 3600 * 1000;
+        // In date class month 4 corresponds to May (0 indexed)
+        const date = new Date(2023, 4, 12);
+        const delta= 30;
 
         const aMonthAgo = getDateWithDelta(date, delta);
+        // We expect the month to be April (04)
         const expected = "2023-04-12";
         expect(aMonthAgo).toBe(expected);
     });
 
     it("Computes date from a year ago correctly", () => {
-        const date = new Date(2023, 5, 12);
-        const delta = 365 * 24 * 3600 * 1000;
+        // In date class month 4 corresponds to May (0 indexed)
+        const date = new Date(2023, 4, 12);
+        const daysDelta = 365;
 
-        const aYearAgo = getDateWithDelta(date, delta);
+        const aYearAgo = getDateWithDelta(date, daysDelta);
+        // We expect the month to be May (04) in year 2022
         const expected = "2022-05-12";
         expect(aYearAgo).toBe(expected);
     });

@@ -42,7 +42,6 @@ const Stations = ({ fetchTime }) => {
         fetchLastReports();
         const interval = setInterval(() => {
             fetchLastReports();
-            console.log("Fetched last reports");
         }, fetchTime);
         return () => clearInterval(interval);
     }, []);

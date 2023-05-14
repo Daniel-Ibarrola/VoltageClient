@@ -76,25 +76,22 @@ const Station = () => {
 
     const handleDateChange = (period) => {
         const date = new Date(Date.now());
-        const days = 1000 * 3600 * 24; // milliseconds in a day
-        let conversionFactor = days;
-
-        let exit = false;
+        let days = null;
         switch (period){
             case "week":
-                conversionFactor *= 7;
+                days = 7;
                 break;
             case "month":
-                conversionFactor *= 30;
+                days = 30;
                 break;
             case "year":
-                conversionFactor *= 365;
+                days= 365;
                 break;
             default:
-                exit = true;
+                break;
         }
-        if (!exit){
-            const startDate = getDateWithDelta(date, conversionFactor);
+        if (days !== null){
+            const startDate = getDateWithDelta(date, days);
             setUrlParams(`?startdate=${startDate}`);
         }
     };
