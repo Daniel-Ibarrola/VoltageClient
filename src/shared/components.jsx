@@ -14,5 +14,5 @@ export const FailAlert = () => {
         <Alert key={"failFetch"} variant={"danger"}>
             <strong>Error:</strong> No se pudo cargar los últimos datos
         </Alert>
-    )
-}
+    );
+};
