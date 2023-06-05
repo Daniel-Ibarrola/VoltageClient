@@ -1,29 +1,70 @@
-import { useState } from "react";
+import { useReducer, useContext } from "react";
+import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import { Link } from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
+
+import AuthContext from "./AuthProvider.jsx";
+import { loginReducer, actions } from "./loginReducer.js";
+import { tokensUrl } from "../shared/index.js";
 import "./style.css";
+
 
 
 const Login = () => {
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [loginData, dispatchLoginData] = useReducer(loginReducer, {
+        email: "",
+        password: "",
+        isError: false,
+    });
+    const { token, setToken } = useContext(AuthContext);
+
+    if (token) {
+        return <Navigate to="/"/>
+    }
 
     const handleEmailChange = (event) => {
-        setEmail(event.target.value);
+        dispatchLoginData({
+            type: actions.setEmail,
+            payload: event.target.value
+        });
     }
 
     const handlePasswordChange = (event) => {
-        setPassword(event.target.value);
+        dispatchLoginData({
+            type: actions.setPassword,
+            payload: event.target.value
+        });
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+
+        try {
+            const response = await axios.post(
+                tokensUrl,
+                {},
+                { auth: {
+                    username: loginData.email,
+                    password: loginData.password,
+                }
+            });
+            dispatchLoginData({
+                type: actions.successLogin,
+            });
+            setToken(response.data.token);
+        } catch (err) {
+            console.log(err);
+            dispatchLoginData({
+                type: actions.errorLogin,
+            });
+        }
+
     }
 
     return (

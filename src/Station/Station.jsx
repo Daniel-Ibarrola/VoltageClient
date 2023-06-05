@@ -1,10 +1,11 @@
-import * as React from "react";
+import { useContext, useReducer, useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
+import AuthContext from "../Auth/AuthProvider.jsx";
 import station_names from "../shared/station_names.js";
 import { reportCountUrl, stationsUrl } from "../shared/api.js";
 import { FailAlert, LoadSpinner } from "../shared/index.js";
@@ -25,7 +26,7 @@ const getPrettyName = (stationName) => {
 
 const Station = () => {
     const { stationName } = useParams();
-    const [stationData, dispatchStationData] = React.useReducer(
+    const [stationData, dispatchStationData] = useReducer(
         stationDataReducer,
         {
             voltages: [],
@@ -34,16 +35,20 @@ const Station = () => {
             isError: false,
             name: getPrettyName(stationName),
         }
-    )
+    );
+    const { token } = useContext(AuthContext);
 
     let initialDate = getDateWithDelta(new Date(Date.now()), 7);
-    const [urlParams, setUrlParams] = React.useState({
+    const [urlParams, setUrlParams] = useState({
         voltages: `?startdate=${initialDate}`,
         reports: `?startdate=${initialDate}`,
     });
 
     const getRequest = async (url, action) => {
-        const result = await axios.get(url);
+        const result = await axios.get(
+            url,
+            {headers: {Authorization: `Bearer ${token}`}}
+        );
         dispatchStationData({
             type: action,
             payload: result.data,
@@ -72,7 +77,7 @@ const Station = () => {
         }
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (stationData.name){
             fetchStationData();
         }

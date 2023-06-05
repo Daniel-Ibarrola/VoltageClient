@@ -1,15 +1,18 @@
+import { useContext } from "react";
 import axios from "axios";
 import * as React from "react";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import './style.css'
+import AuthContext from "../Auth/AuthProvider.jsx";
 import { actions, stationsReducer } from "./stationsReducer.js";
 import { Table } from "./Table/index.js";
 import { SearchForm } from "./SearchForm/index.js";
 import {lastReportsUrl, Notifications} from "../shared/index.js";
 import { LoadSpinner, FailAlert } from "../shared/index.js";
+import './style.css'
+
 
 
 const Stations = ({ fetchTime }) => {
@@ -25,10 +28,15 @@ const Stations = ({ fetchTime }) => {
         }
     );
 
+    const { token } = useContext(AuthContext);
+
     const fetchLastReports = async () => {
         dispatchStations({type: actions.initFetch});
         try {
-            const result = await axios.get(lastReportsUrl);
+            const result = await axios.get(
+                lastReportsUrl,
+                {headers: {Authorization: `Bearer ${token}`}}
+            );
             dispatchStations({
                 type: actions.successFetch,
                 payload: result.data,

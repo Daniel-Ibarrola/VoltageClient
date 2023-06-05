@@ -1,9 +1,9 @@
 
 export const actions = {
-    initFetch: "initFetch",
-    successFetch: "successFetch",
-    failFetch: "failFetch",
-    search: "search",
+    initFetch: 0,
+    successFetch: 1,
+    failFetch: 2,
+    search: 3,
 }
 
 
