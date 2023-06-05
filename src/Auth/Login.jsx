@@ -43,6 +43,10 @@ const Login = () => {
         });
     }
 
+    const saveToken = (userToken) => {
+        localStorage.setItem("token", JSON.stringify(userToken));
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -58,7 +62,9 @@ const Login = () => {
             dispatchLoginData({
                 type: actions.successLogin,
             });
-            setToken(response.data.token);
+            const token = response.data.token;
+            saveToken(token);
+            setToken(token);
         } catch (err) {
             let errMsg = "";
             if (!err?.response){
