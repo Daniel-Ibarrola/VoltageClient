@@ -5,7 +5,7 @@ import RBNavbar from "react-bootstrap/Navbar";
 
 import { Stations } from "./Stations/index.js";
 import { Station } from "./Station/index.js";
-import { Login, Protected, Register } from "./Auth/index.js";
+import {Login, Logout, Protected, Register} from "./Auth/index.js";
 import AuthContext from "./Auth/AuthProvider.jsx";
 
 const NoMatch = () => {
@@ -14,6 +14,9 @@ const NoMatch = () => {
 
 
 const NavBar = () => {
+
+    const { token } = useContext(AuthContext);
+
     return (
     <RBNavbar bg="dark">
         <Container>
@@ -28,6 +31,11 @@ const NavBar = () => {
                     /> Monitor de Estaciones
                 </Link>
             </RBNavbar.Brand>
+            {token &&
+                <RBNavbar.Collapse className="justify-content-end">
+                    <Link to={"/logout"}>Cerrar sesión</Link>
+                </RBNavbar.Collapse>
+            }
         </Container>
     </RBNavbar>
     );
@@ -71,6 +79,7 @@ const App = () => {
                 }
                 />
                 <Route path="login" element={<Login />} />
+                <Route path="logout" element={<Logout />} />
                 <Route path="register" element={<Register />} />
                 <Route path="*" element={<NoMatch />} />
             </Routes>
