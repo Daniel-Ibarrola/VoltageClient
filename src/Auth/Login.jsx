@@ -6,11 +6,11 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import {Link, Navigate} from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import AuthContext from "./AuthProvider.jsx";
 import { loginReducer, actions } from "./loginReducer.js";
-import { tokensUrl } from "../shared/index.js";
+import { FailAlert, tokensUrl } from "../shared/index.js";
 import "./style.css";
 
 
@@ -21,6 +21,7 @@ const Login = () => {
         email: "",
         password: "",
         isError: false,
+        errorMsg: "",
     });
     const { token, setToken } = useContext(AuthContext);
 
@@ -59,9 +60,19 @@ const Login = () => {
             });
             setToken(response.data.token);
         } catch (err) {
-            console.log(err);
+            let errMsg = "";
+            if (!err?.response){
+                errMsg = "Sin respuesta del servidor";
+            }
+            else if (err.response?.status === 401) {
+                errMsg = "Usuario o contraseña inválidos";
+            }
+            else {
+                errMsg = "Falló el inicio de sesión";
+            }
             dispatchLoginData({
                 type: actions.errorLogin,
+                payload: errMsg,
             });
         }
 
@@ -101,7 +112,7 @@ const Login = () => {
                                         <div className="d-grid gap-2 login-button">
                                             <Button
                                                 type="submit"
-                                                disabled={false}
+                                                disabled={!loginData.email || !loginData.password}
                                             >
                                                 Iniciar sesión
                                             </Button>
@@ -110,6 +121,11 @@ const Login = () => {
                                     <Card.Text>
                                         <Link to="/register">Crear una cuenta</Link>
                                     </Card.Text>
+                                {loginData.isError &&
+                                    <FailAlert
+                                        className="login-row"
+                                        msg={loginData.errorMsg} />
+                                }
                             </Card.Body>
                         </Card>
                 </Col>

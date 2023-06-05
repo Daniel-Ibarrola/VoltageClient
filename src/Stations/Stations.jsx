@@ -70,7 +70,7 @@ const Stations = ({ fetchTime }) => {
                     </Col>
                 </Row>
 
-                {stations.isError && <FailAlert />}
+                {stations.isError && <FailAlert msg="No se pudo cargar los últimos datos" />}
                 {stations.isLoading && <LoadSpinner />}
 
                 <Notifications reports={stations.data}/>

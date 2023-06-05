@@ -19,6 +19,7 @@ export const loginReducer = (state, action) => {
             };
         case actions.successLogin:
             return {
+                ...state,
                 email: "",
                 password: "",
                 isError: false,
@@ -28,6 +29,7 @@ export const loginReducer = (state, action) => {
                 email: "",
                 password: "",
                 isError: true,
+                errorMsg: action.payload,
             };
         default:
             throw new Error();

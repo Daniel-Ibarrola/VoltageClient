@@ -9,10 +9,10 @@ export const LoadSpinner = () => {
     );
 };
 
-export const FailAlert = () => {
+export const FailAlert = ({ msg }) => {
     return (
         <Alert key={"failFetch"} variant={"danger"}>
-            <strong>Error:</strong> No se pudo cargar los últimos datos
+            <strong>Error:</strong> {msg}
         </Alert>
     );
 };

@@ -71,6 +71,7 @@ describe("loginReducer", () => {
             email: "",
             password: "dog",
             isError: false,
+            errorMsg: "",
         };
         const newState = loginReducer(initialState, {
             type: actions.setEmail,
@@ -81,6 +82,7 @@ describe("loginReducer", () => {
             email: "triton@example.com",
             password: "dog",
             isError: false,
+            errorMsg: "",
         }
         expect(newState).toStrictEqual(expectedState);
     });
@@ -90,6 +92,7 @@ describe("loginReducer", () => {
             email: "triton@example.com",
             password: "",
             isError: false,
+            errorMsg: "",
         };
         const newState = loginReducer(initialState, {
             type: actions.setPassword,
@@ -100,6 +103,7 @@ describe("loginReducer", () => {
             email: "triton@example.com",
             password: "dog",
             isError: false,
+            errorMsg: "",
         }
         expect(newState).toStrictEqual(expectedState);
     });
@@ -109,6 +113,7 @@ describe("loginReducer", () => {
             email: "triton@example.com",
             password: "dog",
             isError: false,
+            errorMsg: "",
         };
         const newState = loginReducer(initialState, {
             type: actions.successLogin
@@ -118,6 +123,7 @@ describe("loginReducer", () => {
             email: "",
             password: "",
             isError: false,
+            errorMsg: "",
         }
         expect(newState).toStrictEqual(expectedState);
     });
@@ -127,16 +133,19 @@ describe("loginReducer", () => {
             email: "triton@example.com",
             password: "dog",
             isError: false,
+            errorMsg: "",
         };
         const newState = loginReducer(initialState, {
-            type: actions.errorLogin
+            type: actions.errorLogin,
+            payload: "Usuario o contraseña invalidos"
         });
 
         const expectedState = {
             email: "",
             password: "",
             isError: true,
-        }
+            errorMsg: "Usuario o contraseña invalidos",
+        };
         expect(newState).toStrictEqual(expectedState);
     });
 });
