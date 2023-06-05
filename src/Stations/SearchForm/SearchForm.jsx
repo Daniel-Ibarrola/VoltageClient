@@ -5,7 +5,6 @@ import Row from "react-bootstrap/Row";
 import "./style.css"
 
 const SearchForm = ({ searchTerm, onSearchInput}) => {
-    // TODO: Add search icon
     return (
         <Form className="search-form">
             <Row>

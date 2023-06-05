@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
@@ -7,14 +8,18 @@ import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
 import "./style.css";
 
+
 const Login = () => {
 
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     const handleEmailChange = (event) => {
-        console.log(event.target.value);
+        setEmail(event.target.value);
     }
 
     const handlePasswordChange = (event) => {
-        console.log(event.target.value);
+        setPassword(event.target.value);
     }
 
     const handleSubmit = (event) => {
@@ -53,12 +58,17 @@ const Login = () => {
                                             />
                                         </Form.Group>
                                         <div className="d-grid gap-2 login-button">
-                                            <Button type="submit">Iniciar sesión</Button>
+                                            <Button
+                                                type="submit"
+                                                disabled={false}
+                                            >
+                                                Iniciar sesión
+                                            </Button>
                                         </div>
                                     </Form>
-                                    <Card.Link>
+                                    <Card.Text>
                                         <Link to="/register">Crear una cuenta</Link>
-                                    </Card.Link>
+                                    </Card.Text>
                             </Card.Body>
                         </Card>
                 </Col>

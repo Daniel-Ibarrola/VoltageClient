@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext } from "react";
 import {Route, Routes, Link, Navigate} from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import RBNavbar from "react-bootstrap/Navbar";
@@ -6,6 +6,7 @@ import RBNavbar from "react-bootstrap/Navbar";
 import { Stations } from "./Stations/index.js";
 import { Station } from "./Station/index.js";
 import { Login, Protected, Register } from "./Auth/index.js";
+import AuthContext from "./Auth/AuthProvider.jsx";
 
 const NoMatch = () => {
     return <h1>Aqui no hay nada: 404</h1>
@@ -35,9 +36,10 @@ const NavBar = () => {
 const fetchTime = 3600 * 1000;  // One hour
 // const fetchTime = 120 * 1000;  // Two minutes
 
-const Home = ({ isLoggedIn }) => {
+const Home = () => {
 
-    if (!isLoggedIn){
+    const { token } = useContext(AuthContext);
+    if (!token){
         return <Navigate to="/login"/>;
     }
 
@@ -46,7 +48,6 @@ const Home = ({ isLoggedIn }) => {
 
 
 const App = () => {
-    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
     return (
         <>
@@ -56,7 +57,7 @@ const App = () => {
                 <Route
                     path="stations"
                     element={
-                    <Protected isLoggedIn={isLoggedIn}>
+                    <Protected>
                         <Stations fetchTime={fetchTime}/>
                     </Protected>
                 }
@@ -64,7 +65,7 @@ const App = () => {
                 <Route
                     path="stations/:stationName"
                     element={
-                    <Protected isLoggedIn={isLoggedIn}>
+                    <Protected>
                         <Station fetchTime={fetchTime} />
                     </Protected>
                 }

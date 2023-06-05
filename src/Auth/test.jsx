@@ -15,7 +15,7 @@ describe("Login", () => {
                 token: "FakeToken",
                 expiration: 3600,
             }});
-        axios.get.mockImplementationOnce(() => promise);
+        axios.post.mockImplementationOnce(() => promise);
 
         const routes = [
             {
@@ -28,12 +28,12 @@ describe("Login", () => {
             }
         ]
         const router = createMemoryRouter(routes, {
-           initialEntries: ["/"],
-           initialIndex: 1,
+           initialEntries: ["/login"],
+           initialIndex: 0,
         });
 
         render(<RouterProvider router={router} />);
-        expect(screen.queryByText("Iniciar sesion")).toBeInTheDocument();
+        expect(screen.queryAllByText(/Iniciar/)[0]).toBeInTheDocument();
 
         fireEvent.click(screen.queryByRole("button"));
         await waitFor(async () => await promise);
@@ -41,16 +41,16 @@ describe("Login", () => {
         expect(screen.queryByText("Estaciones")).toBeInTheDocument();
     });
 
-    it("Invalid credential displays error", async () => {
+    it("Invalid credentials display error", async () => {
         const promise = Promise.reject();
-        axios.get.mockImplementationOnce(() => promise);
+        axios.post.mockImplementationOnce(() => promise);
 
         render(<BrowserRouter><Login /></BrowserRouter>);
 
         fireEvent.click(screen.queryByRole("button"));
         await waitFor(async () => await promise);
 
-        expect(screen.queryByText(/Error al iniciar sesión/)).toBeInTheDocument();
+        expect(screen.queryByText(/Error al iniciar/)).toBeInTheDocument();
     });
 
 });
