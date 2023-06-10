@@ -71,6 +71,7 @@ const Login = () => {
                 errMsg = "Sin respuesta del servidor";
             }
             else if (err.response?.status === 401) {
+                // TODO: handle unconfirmed users
                 errMsg = "Usuario o contraseña inválidos";
             }
             else {

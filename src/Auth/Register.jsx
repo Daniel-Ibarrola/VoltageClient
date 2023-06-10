@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
 import Container from "react-bootstrap/Container";
@@ -7,6 +8,7 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./style.css"
+import { FailAlert, SuccessAlert, registerUrl} from "../shared/index.js";
 
 
 const validate = (values) => {
@@ -50,15 +52,49 @@ const validate = (values) => {
 
 
 const Register = () => {
+
+    const [response, setResponse] = useState({
+        error: false,
+        msg: "",
+    });
+
+    const handleSubmit = async (values) => {
+        try {
+            await axios.post(
+                registerUrl,
+                {
+                    email: values.email,
+                    password: values.password,
+                }
+            );
+            setResponse({
+                error: false,
+                msg: "Se ha enviado un email de confirmación.",
+            })
+        } catch (err) {
+            if (err.response){
+                if (err.response?.status === 400){
+                    setResponse({
+                        error: true,
+                        msg: "email en uso."
+                    });
+                } else if (err.response?.status === 401){
+                    setResponse({
+                        error: true,
+                        msg: "email invalido."
+                    });
+                }
+            }
+        }
+    }
+
     const formik = useFormik({
         initialValues: {
             email: "",
             password: "",
         },
         validate,
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
-        },
+        onSubmit: async (values) => await handleSubmit(values),
     })
 
     return (
@@ -109,6 +145,8 @@ const Register = () => {
                                         Crear cuenta
                                     </Button>
                                 </div>
+                                {(response.error && response.msg) && <FailAlert msg={response.msg} />}
+                                {(!response.error && response.msg) && <SuccessAlert msg={response.msg} />}
                             </Form>
                         </Card.Body>
                     </Card>

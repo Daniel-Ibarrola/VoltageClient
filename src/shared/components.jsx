@@ -11,8 +11,17 @@ export const LoadSpinner = () => {
 
 export const FailAlert = ({ msg }) => {
     return (
-        <Alert key={"failFetch"} variant={"danger"}>
+        <Alert key="failFetch" variant="danger">
             <strong>Error:</strong> {msg}
+        </Alert>
+    );
+};
+
+
+export const SuccessAlert = ({ msg }) => {
+    return (
+        <Alert key="successAlert" variant="primary">
+            {msg}
         </Alert>
     );
 };
