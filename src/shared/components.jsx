@@ -9,19 +9,19 @@ export const LoadSpinner = () => {
     );
 };
 
-export const FailAlert = ({ msg }) => {
+export const FailAlert = ({ children }) => {
     return (
         <Alert key="failFetch" variant="danger">
-            <strong>Error:</strong> {msg}
+            {children}
         </Alert>
     );
 };
 
 
-export const SuccessAlert = ({ msg }) => {
+export const SuccessAlert = ({ children }) => {
     return (
         <Alert key="successAlert" variant="primary">
-            {msg}
+            {children}
         </Alert>
     );
 };

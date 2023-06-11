@@ -1,10 +1,10 @@
 import axios from "axios";
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-// import { RouterProvider, createMemoryRouter, BrowserRouter } from "react-router-dom";
-//
+import { BrowserRouter } from "react-router-dom";
+
 // import { AuthProvider } from "./AuthProvider.jsx";
-// import { Login } from "./Login.jsx";
+import { Login } from "./Login.jsx";
 // import { Stations } from "../Stations/index.js";
 import { actions, loginReducer } from "./loginReducer.js";
 import { Register } from "./Register.jsx";
@@ -12,61 +12,88 @@ import { Register } from "./Register.jsx";
 
 vi.mock("axios");
 
-// describe("Login", () => {
-//     // it("Successful login redirects to stations page", async () => {
-//     //     const promise = Promise.resolve({
-//     //         data: {
-//     //             token: "FakeToken",
-//     //             expiration: 3600,
-//     //         }});
-//     //     axios.post.mockImplementationOnce(() => promise);
-//     //
-//     //     const routes = [
-//     //         {
-//     //             path: "/login",
-//     //             element: <AuthProvider><Login /></AuthProvider>,
-//     //         },
-//     //         {
-//     //             path: "/stations",
-//     //             element: <Stations />
-//     //         }
-//     //     ]
-//     //     const router = createMemoryRouter(routes, {
-//     //        initialEntries: ["/login"],
-//     //        initialIndex: 0,
-//     //     });
-//     //
-//     //     render(<RouterProvider router={router} />);
-//     //     expect(screen.queryAllByText(/Iniciar/)[0]).toBeInTheDocument();
-//     //
-//     //     await waitFor(async () =>  fireEvent.click(
-//     //         screen.queryByRole("button"))
-//     //     );
-//     //     await waitFor(async () => await promise);
-//     //     expect(screen.queryByText("Estaciones")).toBeInTheDocument();
-//     // });
-//
-//     it("Invalid credentials display error", async () => {
-//         const promise = Promise.reject();
-//         axios.post.mockImplementationOnce(() => promise);
-//
-//         render(<BrowserRouter>
-//             <AuthProvider><Login /></AuthProvider>
-//         </BrowserRouter>);
-//
-//
-//         await waitFor(async () =>  fireEvent.click(
-//             screen.queryByRole("button"))
-//         );
-//         try {
-//             await waitFor(async () => await promise);
-//         } catch (error) {
-//             expect(screen.queryByText(/Error al iniciar/)).toBeInTheDocument();
-//         }
-//
-//     });
-//
-// });
+const rejectedPromise = (statusCode) => {
+    return Promise.reject({
+        response: {
+            status: statusCode,
+        }
+    });
+}
+
+const waitForFormSubmission = async (promise) => {
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+        target: {value: "triton@example.com"}
+    });
+    fireEvent.change(screen.getByPlaceholderText("Contraseña"), {
+        target: {value: "6MonkeysRLooking^"}
+    });
+    fireEvent.click(screen.getByRole("button"));
+    await waitFor(async () => await promise);
+}
+
+
+describe("Login", () => {
+    // it("Successful login redirects to stations page", async () => {
+    //     const promise = Promise.resolve({
+    //         data: {
+    //             token: "FakeToken",
+    //             expiration: 3600,
+    //         }});
+    //     axios.post.mockImplementationOnce(() => promise);
+    //
+    //     const routes = [
+    //         {
+    //             path: "/login",
+    //             element: <AuthProvider><Login /></AuthProvider>,
+    //         },
+    //         {
+    //             path: "/stations",
+    //             element: <Stations />
+    //         }
+    //     ]
+    //     const router = createMemoryRouter(routes, {
+    //        initialEntries: ["/login"],
+    //        initialIndex: 0,
+    //     });
+    //
+    //     render(<RouterProvider router={router} />);
+    //     expect(screen.queryAllByText(/Iniciar/)[0]).toBeInTheDocument();
+    //
+    //     await waitFor(async () =>  fireEvent.click(
+    //         screen.queryByRole("button"))
+    //     );
+    //     await waitFor(async () => await promise);
+    //     expect(screen.queryByText("Estaciones")).toBeInTheDocument();
+    // });
+
+    it("Invalid credentials display error", async () => {
+        const promise = rejectedPromise(401);
+        axios.post.mockImplementationOnce(() => promise);
+
+        render(<BrowserRouter><Login /></BrowserRouter>);
+
+        try {
+            await waitForFormSubmission(promise);
+        } catch (error) {
+            expect(screen.queryByText(/Usuario o contraseña inválidos/)).toBeInTheDocument();
+        }
+    });
+
+    it("Unconfirmed user displays re-send confirmation link", async () => {
+        const promise = rejectedPromise(400);
+        axios.post.mockImplementationOnce(() => promise);
+
+        render(<BrowserRouter><Login /></BrowserRouter>);
+
+        try {
+            await waitForFormSubmission(promise);
+        } catch (error) {
+            expect(screen.queryByText(/no confirmado/)).toBeInTheDocument();
+            expect(screen.queryByText(/reenviar email de confirmación/)).toBeInTheDocument();
+        }
+    });
+
+});
 
 
 describe("loginReducer", () => {
@@ -157,25 +184,6 @@ describe("loginReducer", () => {
 
 describe("Register", () => {
 
-    const rejectedPromise = (statusCode) => {
-        return Promise.reject({
-            response: {
-                status: statusCode,
-            }
-        });
-    }
-
-    const waitForFormSubmission = async (promise) => {
-        fireEvent.change(screen.getByPlaceholderText("Email"), {
-            target: {value: "triton@example.com"}
-        });
-        fireEvent.change(screen.getByPlaceholderText("Contraseña"), {
-            target: {value: "6MonkeysRLooking^"}
-        });
-        fireEvent.click(screen.getByRole("button"));
-        await waitFor(async () => await promise);
-    }
-
     it("Email in use displays error message", async () => {
         const promise = rejectedPromise(400);
         axios.post.mockImplementationOnce(() => promise);
@@ -196,7 +204,7 @@ describe("Register", () => {
         try {
             await waitForFormSubmission(promise);
         } catch (error) {
-            expect(screen.queryByText(/email invalido/)).toBeInTheDocument();
+            expect(screen.queryByText(/email inválido/)).toBeInTheDocument();
         }
     });
 

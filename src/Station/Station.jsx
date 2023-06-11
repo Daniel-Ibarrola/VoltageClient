@@ -119,7 +119,11 @@ const Station = () => {
                         </Col>
                     </Row>
 
-                    {stationData.isError && <FailAlert msg="No se pudo cargar los últimos datos" />}
+                    {stationData.isError &&
+                        <FailAlert>
+                            <p><strong>Error:</strong> No se pudo cargar los últimos datos</p>
+                        </FailAlert>
+                    }
                     {stationData.isLoading && <LoadSpinner />}
                     {(stationData.voltages.length > 0 && stationData.reports.length > 0)
                         && (

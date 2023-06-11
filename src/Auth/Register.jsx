@@ -69,19 +69,19 @@ const Register = () => {
             );
             setResponse({
                 error: false,
-                msg: "Se ha enviado un email de confirmación.",
+                msg: <p>Se ha enviado un email de confirmación.</p>
             })
         } catch (err) {
             if (err.response){
                 if (err.response?.status === 400){
                     setResponse({
                         error: true,
-                        msg: "email en uso."
+                        msg: <p><strong>Error:</strong> email en uso</p>
                     });
                 } else if (err.response?.status === 401){
                     setResponse({
                         error: true,
-                        msg: "email invalido."
+                        msg: <p><strong>Error:</strong> email inválido</p>
                     });
                 }
             }
@@ -145,8 +145,8 @@ const Register = () => {
                                         Crear cuenta
                                     </Button>
                                 </div>
-                                {(response.error && response.msg) && <FailAlert msg={response.msg} />}
-                                {(!response.error && response.msg) && <SuccessAlert msg={response.msg} />}
+                                {(response.error && response.msg) && <FailAlert>{response.msg}</FailAlert>}
+                                {(!response.error && response.msg) && <SuccessAlert>{response.msg}</SuccessAlert>}
                             </Form>
                         </Card.Body>
                     </Card>

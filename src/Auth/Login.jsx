@@ -21,7 +21,7 @@ const Login = () => {
         email: "",
         password: "",
         isError: false,
-        errorMsg: "",
+        errorMsg: null,
     });
     const { token, setToken } = useContext(AuthContext);
 
@@ -66,23 +66,35 @@ const Login = () => {
             saveToken(token);
             setToken(token);
         } catch (err) {
-            let errMsg = "";
+            let errMsg = null;
             if (!err?.response){
-                errMsg = "Sin respuesta del servidor";
+                errMsg = <p><strong>Error:</strong> Sin respuesta del servidor</p>
+            }
+            else if (err.response?.status === 400) {
+                errMsg = (
+                    <div>
+                        <p><strong>Error:</strong> Usuario no confirmado</p>
+                        <Link
+                            to={"/confirm"}
+                            state={{email: loginData.email, password: loginData.password}}
+                        >
+                            Click aquí para reenviar email de confirmación
+                        </Link>
+                    </div>
+
+                )
             }
             else if (err.response?.status === 401) {
-                // TODO: handle unconfirmed users
-                errMsg = "Usuario o contraseña inválidos";
+                errMsg = <p><strong>Error:</strong> Usuario o contraseña inválidos</p>
             }
             else {
-                errMsg = "Falló el inicio de sesión";
+                errMsg = <p><strong>Error:</strong> Falló el inicio de sesión</p>
             }
             dispatchLoginData({
                 type: actions.errorLogin,
                 payload: errMsg,
             });
         }
-
     }
 
     return (
@@ -95,7 +107,12 @@ const Login = () => {
                             <Card.Body className="login-body">
                                     <Form onSubmit={handleSubmit}>
                                         <Form.Group>
-                                            <Form.Label htmlFor="email">Correo</Form.Label>
+                                            <Form.Label
+                                                htmlFor="email"
+                                                className="form-label"
+                                            >
+                                                Correo
+                                            </Form.Label>
                                             <Form.Control
                                                 type="email"
                                                 placeholder={"Email"}
@@ -106,7 +123,12 @@ const Login = () => {
                                             />
                                         </Form.Group>
                                         <Form.Group>
-                                            <Form.Label htmlFor="password">Contraseña</Form.Label>
+                                            <Form.Label
+                                                htmlFor="password"
+                                                className="form-label"
+                                            >
+                                                Contraseña
+                                            </Form.Label>
                                             <Form.Control
                                                 type="password"
                                                 placeholder="Contraseña"
@@ -129,9 +151,9 @@ const Login = () => {
                                         <Link to="/register">Crear una cuenta</Link>
                                     </Card.Text>
                                 {loginData.isError &&
-                                    <FailAlert
-                                        className="login-row"
-                                        msg={loginData.errorMsg} />
+                                    <FailAlert className="login-row">
+                                        {loginData.errorMsg}
+                                    </FailAlert>
                                 }
                             </Card.Body>
                         </Card>
