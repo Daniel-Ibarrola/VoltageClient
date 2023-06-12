@@ -150,6 +150,9 @@ const Login = () => {
                                     <Card.Text>
                                         <Link to="/register">Crear una cuenta</Link>
                                     </Card.Text>
+                                    <Card.Text>
+                                        <Link to="/resetpassword">¿Olvidó su contraseña?</Link>
+                                    </Card.Text>
                                 {loginData.isError &&
                                     <FailAlert className="login-row">
                                         {loginData.errorMsg}

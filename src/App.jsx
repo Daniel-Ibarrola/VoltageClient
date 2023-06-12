@@ -9,8 +9,10 @@ import {
     Confirm,
     Login,
     Logout,
-    Protected, Reconfirm,
-    Register
+    Protected,
+    Reconfirm,
+    Register,
+    Reset,
 } from "./Auth/index.js";
 import AuthContext from "./Auth/Context/AuthProvider.jsx";
 
@@ -89,6 +91,7 @@ const App = () => {
                 <Route path="register" element={<Register />} />
                 <Route path="confirm/:token" element={<Confirm />}/>
                 <Route path="reconfirm" element={<Reconfirm />} />
+                <Route path="resetpassword" element={<Reset />} />
                 <Route path="*" element={<NoMatch />} />
             </Routes>
         </>
