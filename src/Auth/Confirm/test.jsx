@@ -1,7 +1,7 @@
 import {describe, expect, it, vi} from "vitest";
 import axios from "axios";
 import {render, screen, waitFor} from "@testing-library/react";
-import {BrowserRouter, useLocation} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {Confirm, Reconfirm} from "./Confirm.jsx";
 
 vi.mock("axios");
@@ -10,33 +10,31 @@ vi.mock("react-router-dom");
 
 describe("Reconfirm", () => {
 
-    it("Successful reconfirmation displays message", async () => {
-        const promise = Promise.resolve();
+    const getMocks = (promise) => {
         axios.get.mockImplementationOnce(() => promise);
-        useLocation.mockImplementationOnce(() => ({
+        useLocation.mockImplementation(() => ({
             state: {
                 email: "triton@example.com",
                 password: "dog",
             }
         }));
+    }
 
-        render(<BrowserRouter><Reconfirm /></BrowserRouter>);
+    it("Successful reconfirmation displays message", async () => {
+        const promise = Promise.resolve();
+        getMocks(promise);
+
+        render(<Reconfirm />);
         await waitFor(async () => await promise);
 
-        expect(screen.queryByText(/enviado email de confirmación/)).toBeInTheDocument();
+        expect(screen.queryByText(/enviado un email de confirmación/)).toBeInTheDocument();
     });
 
     it("Unsuccessful reconfirmation displays error message", async () => {
         const promise = Promise.reject();
-        axios.get.mockImplementationOnce(() => promise);
-        useLocation.mockImplementationOnce(() => ({
-            state: {
-                email: "triton@example.com",
-                password: "dog",
-            }
-        }));
+        getMocks(promise);
 
-        render(<BrowserRouter><Reconfirm /></BrowserRouter>);
+        render(<Reconfirm />);
 
         try {
             await waitFor(async () => await promise);
@@ -49,13 +47,20 @@ describe("Reconfirm", () => {
 
 describe("Confirm", () => {
 
+    const getMocks = (promise) => {
+        axios.get.mockImplementationOnce(() => promise);
+        useParams.mockImplementationOnce(() => ({
+            token: "testToken"
+        }));
+    }
+
     it("Successful confirmation displays message", async () => {
         const promise = Promise.resolve({
             "confirmed": "account confirmed"
         });
-        axios.get.mockImplementationOnce(() => promise);
+        getMocks(promise);
 
-        render(<BrowserRouter><Confirm /></BrowserRouter>);
+        render(<Confirm />);
         await waitFor(async () => await promise);
 
         expect(screen.queryByText(/enviado email de confirmación/)).toBeInTheDocument();
@@ -65,9 +70,9 @@ describe("Confirm", () => {
         const promise = Promise.resolve({
             "confirmed": "user already confirmed"
         });
-        axios.get.mockImplementationOnce(() => promise);
+        getMocks(promise);
 
-        render(<BrowserRouter><Confirm /></BrowserRouter>);
+        render(<Confirm />);
         await waitFor(async () => await promise);
 
         expect(screen.queryByText(/email ya ha sido confirmado/)).toBeInTheDocument();
@@ -75,9 +80,9 @@ describe("Confirm", () => {
 
     it("Invalid confirmation link", async () => {
         const promise = Promise.reject();
-        axios.get.mockImplementationOnce(() => promise);
+        getMocks(promise);
 
-        render(<BrowserRouter><Confirm /></BrowserRouter>);
+        render(<Confirm />);
 
         try {
             await waitFor(async () => await promise);

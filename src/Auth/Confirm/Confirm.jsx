@@ -7,13 +7,18 @@ import {reconfirmUrl} from "../../shared/index.js";
 
 
 const Confirm = () => {
-    const token = useParams();
-    console.log("token ", token);
+    const { token } = useParams();
+    const [confirmStatus, setConfirmStatus] = useState("");
+
+    const requestConfirmation = async () => {
+
+    }
 
     return (
-        <>
-            <h2>Confirm</h2>
-        </>
+        <Container>
+            <h2>Confirmación de cuenta</h2>
+            <Link to="/">Volver al inicio</Link>
+        </Container>
     )
 }
 
@@ -27,7 +32,6 @@ const Reconfirm = () => {
             try {
                 await axios.get(
                     reconfirmUrl,
-                    {},
                     {
                         auth: {
                             username: state.email,
