@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import AuthContext from "../Auth/AuthProvider.jsx";
+import AuthContext from "../Auth/Context/AuthProvider.jsx";
 import station_names from "../shared/station_names.js";
 import { reportCountUrl, stationsUrl } from "../shared/api.js";
 import { FailAlert, LoadSpinner } from "../shared/index.js";

@@ -12,7 +12,7 @@ import {
     Protected, Reconfirm,
     Register
 } from "./Auth/index.js";
-import AuthContext from "./Auth/AuthProvider.jsx";
+import AuthContext from "./Auth/Context/AuthProvider.jsx";
 
 const NoMatch = () => {
     return <h1>Aqui no hay nada: 404</h1>

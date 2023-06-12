@@ -7,8 +7,8 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "./style.css"
-import { FailAlert, SuccessAlert, registerUrl} from "../shared/index.js";
+import "../style.css"
+import { FailAlert, SuccessAlert, registerUrl} from "../../shared/index.js";
 
 
 const validate = (values) => {

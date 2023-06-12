@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {Link, useLocation, useParams} from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
-import {reconfirmUrl} from "../shared/index.js";
+import {reconfirmUrl} from "../../shared/index.js";
 
 
 

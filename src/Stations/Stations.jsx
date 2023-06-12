@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import AuthContext from "../Auth/AuthProvider.jsx";
+import AuthContext from "../Auth/Context/AuthProvider.jsx";
 import { actions, stationsReducer } from "./stationsReducer.js";
 import { Table } from "./Table/index.js";
 import { SearchForm } from "./SearchForm/index.js";

@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import AuthContext from "./AuthProvider.jsx";
+import AuthContext from "../Context/AuthProvider.jsx";
 import {Navigate} from "react-router-dom";
 
 

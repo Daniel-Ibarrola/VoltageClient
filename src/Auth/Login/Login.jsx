@@ -8,10 +8,10 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { Link, Navigate } from "react-router-dom";
 
-import AuthContext from "./AuthProvider.jsx";
+import AuthContext from "../Context/AuthProvider.jsx";
 import { loginReducer, actions } from "./loginReducer.js";
-import { FailAlert, tokensUrl } from "../shared/index.js";
-import "./style.css";
+import { FailAlert, tokensUrl } from "../../shared/index.js";
+import "../style.css";
 
 
 
