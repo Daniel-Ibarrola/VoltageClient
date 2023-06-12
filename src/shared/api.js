@@ -1,4 +1,4 @@
-export const baseUrl = "http://localhost:5000/api/v1";
+export const baseUrl = "/api/v1";
 export const changePasswordUrl = baseUrl + "/change_password/";
 export const confirmUrl = baseUrl + "/confirm/"
 export const stationsUrl = baseUrl + "/stations/";

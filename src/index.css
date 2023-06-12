@@ -16,6 +16,10 @@
     text-decoration: none;
 }
 
+.nav-dropdown-item {
+    margin-bottom: 0;
+}
+
 .nav-dropdown-item > a {
     color: white;
     text-decoration: none;

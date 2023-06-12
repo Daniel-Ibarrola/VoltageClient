@@ -34,10 +34,16 @@ const UserDropDown = () => {
                   menuVariant="dark"
                   className="nav-dropdown"
               >
-                  <NavDropdown.Item className="nav-dropdown-item">
+                  <NavDropdown.Item
+                      as="p"
+                      className="nav-dropdown-item"
+                  >
                       <Link to={"/change"}>Cambiar contraseña</Link>
                   </NavDropdown.Item>
-                  <NavDropdown.Item className="nav-dropdown-item">
+                  <NavDropdown.Item
+                        as="p"
+                      className="nav-dropdown-item"
+                  >
                       <Link to={"/logout"}>Cerrar sesión</Link>
                   </NavDropdown.Item>
               </NavDropdown>
