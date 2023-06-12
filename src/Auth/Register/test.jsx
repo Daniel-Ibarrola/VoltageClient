@@ -1,10 +1,12 @@
-import {describe, expect, it, vi} from "vitest";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import {describe, expect, it, vi} from "vitest";
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import { Register } from "./Register.jsx";
 
 
 vi.mock("axios");
+
 
 const rejectedPromise = (statusCode) => {
     return Promise.reject({

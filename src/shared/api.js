@@ -7,3 +7,4 @@ export const tokensUrl = baseUrl + "/tokens/";
 export const registerUrl = baseUrl + "/new_user/";
 export const reconfirmUrl = baseUrl + "/confirm";
 export const resetUrl = baseUrl + "/reset";
+export const resetPasswordUrl = baseUrl + "/reset/"
