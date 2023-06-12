@@ -5,7 +5,13 @@ import RBNavbar from "react-bootstrap/Navbar";
 
 import { Stations } from "./Stations/index.js";
 import { Station } from "./Station/index.js";
-import {Login, Logout, Protected, Register} from "./Auth/index.js";
+import {
+    Confirm,
+    Login,
+    Logout,
+    Protected, Reconfirm,
+    Register
+} from "./Auth/index.js";
 import AuthContext from "./Auth/AuthProvider.jsx";
 
 const NoMatch = () => {
@@ -24,7 +30,7 @@ const NavBar = () => {
                 <Link to={"/stations"}>
                     <img
                         alt=""
-                        src="../../public/cires.png"
+                        src="cires.png"
                         width="50"
                         height="50"
                         className="d-inline-block align-top"
@@ -81,6 +87,8 @@ const App = () => {
                 <Route path="login" element={<Login />} />
                 <Route path="logout" element={<Logout />} />
                 <Route path="register" element={<Register />} />
+                <Route path="confirm/:token" element={<Confirm />}/>
+                <Route path="reconfirm" element={<Reconfirm />} />
                 <Route path="*" element={<NoMatch />} />
             </Routes>
         </>

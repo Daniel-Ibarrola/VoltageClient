@@ -75,7 +75,7 @@ const Login = () => {
                     <div>
                         <p><strong>Error:</strong> Usuario no confirmado</p>
                         <Link
-                            to={"/confirm"}
+                            to={"/reconfirm"}
                             state={{email: loginData.email, password: loginData.password}}
                         >
                             Click aquí para reenviar email de confirmación

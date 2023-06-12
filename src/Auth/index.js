@@ -1,4 +1,5 @@
 export * from "./AuthProvider.jsx";
+export * from "./Confirm.jsx";
 export * from "./Login.jsx";
 export * from "./Logout.jsx";
 export * from "./Protected.jsx"
