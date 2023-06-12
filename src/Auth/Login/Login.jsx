@@ -9,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import { Link, Navigate } from "react-router-dom";
 
 import AuthContext from "../Context/AuthProvider.jsx";
-import { loginReducer, actions } from "./loginReducer.js";
+import { formReducer, actions } from "../State/formReducer.js";
 import { FailAlert, tokensUrl } from "../../shared/index.js";
 import "../style.css";
 
@@ -17,7 +17,7 @@ import "../style.css";
 
 const Login = () => {
 
-    const [loginData, dispatchLoginData] = useReducer(loginReducer, {
+    const [loginData, dispatchLoginData] = useReducer(formReducer, {
         email: "",
         password: "",
         isError: false,

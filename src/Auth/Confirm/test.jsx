@@ -1,6 +1,6 @@
 import {describe, expect, it, vi} from "vitest";
 import axios from "axios";
-import {render, screen, waitFor} from "@testing-library/react";
+import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import {useLocation, useParams} from "react-router-dom";
 import {Confirm, Reconfirm} from "./Confirm.jsx";
 
@@ -49,33 +49,50 @@ describe("Confirm", () => {
 
     const getMocks = (promise) => {
         axios.get.mockImplementationOnce(() => promise);
-        useParams.mockImplementationOnce(() => ({
+        useParams.mockImplementation(() => ({
             token: "testToken"
         }));
     }
 
-    it("Successful confirmation displays message", async () => {
+    const waitForFormSubmission = async (promise) => {
+        fireEvent.change(screen.getByPlaceholderText("Email"), {
+            target: {value: "triton@example.com"}
+        });
+        fireEvent.change(screen.getByPlaceholderText("Contraseña"), {
+            target: {value: "6MonkeysRLooking^"}
+        });
+        fireEvent.click(screen.getByRole("button"));
+        await waitFor(async () => await promise);
+    }
+
+    it("Successful confirmation displays alert", async () => {
         const promise = Promise.resolve({
-            "confirmed": "account confirmed"
+            data: {
+                "confirmed": "account confirmed"
+            }
         });
         getMocks(promise);
+        window.alert = vi.fn();
 
         render(<Confirm />);
-        await waitFor(async () => await promise);
+        await waitForFormSubmission(promise);
 
-        expect(screen.queryByText(/enviado email de confirmación/)).toBeInTheDocument();
+        expect(window.alert).toHaveBeenCalledTimes(1);
     });
 
-    it("Already confirmed user displays message", async () => {
+    it("Already confirmed user displays alert", async () => {
         const promise = Promise.resolve({
-            "confirmed": "user already confirmed"
+            data: {
+                "confirmed": "user already confirmed"
+            }
         });
         getMocks(promise);
+        window.alert = vi.fn();
 
         render(<Confirm />);
-        await waitFor(async () => await promise);
+        await waitForFormSubmission(promise);
 
-        expect(screen.queryByText(/email ya ha sido confirmado/)).toBeInTheDocument();
+        expect(window.alert).toHaveBeenCalledTimes(1);
     });
 
     it("Invalid confirmation link", async () => {
@@ -85,9 +102,9 @@ describe("Confirm", () => {
         render(<Confirm />);
 
         try {
-            await waitFor(async () => await promise);
+            await waitForFormSubmission(promise);
         } catch {
-            expect(screen.queryByText(/Link invalido/)).toBeInTheDocument();
+            expect(screen.queryByText(/link inválido/)).toBeInTheDocument();
         }
     });
 });

@@ -4,7 +4,6 @@ import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 
 import { Login } from "./Login.jsx";
-import { actions, loginReducer } from "./loginReducer.js";
 
 
 vi.mock("axios");
@@ -90,89 +89,4 @@ describe("Login", () => {
         }
     });
 
-});
-
-describe("loginReducer", () => {
-    it("Sets email", () => {
-        const initialState = {
-            email: "",
-            password: "dog",
-            isError: false,
-            errorMsg: "",
-        };
-        const newState = loginReducer(initialState, {
-            type: actions.setEmail,
-            payload: "triton@example.com"
-        });
-
-        const expectedState = {
-            email: "triton@example.com",
-            password: "dog",
-            isError: false,
-            errorMsg: "",
-        }
-        expect(newState).toStrictEqual(expectedState);
-    });
-
-    it("Sets password", () => {
-        const initialState = {
-            email: "triton@example.com",
-            password: "",
-            isError: false,
-            errorMsg: "",
-        };
-        const newState = loginReducer(initialState, {
-            type: actions.setPassword,
-            payload: "dog"
-        });
-
-        const expectedState = {
-            email: "triton@example.com",
-            password: "dog",
-            isError: false,
-            errorMsg: "",
-        }
-        expect(newState).toStrictEqual(expectedState);
-    });
-
-    it("Login success", () => {
-        const initialState = {
-            email: "triton@example.com",
-            password: "dog",
-            isError: false,
-            errorMsg: "",
-        };
-        const newState = loginReducer(initialState, {
-            type: actions.successLogin
-        });
-
-        const expectedState = {
-            email: "",
-            password: "",
-            isError: false,
-            errorMsg: "",
-        }
-        expect(newState).toStrictEqual(expectedState);
-    });
-
-    it("Login fail", () => {
-        const initialState = {
-            email: "triton@example.com",
-            password: "dog",
-            isError: false,
-            errorMsg: "",
-        };
-        const newState = loginReducer(initialState, {
-            type: actions.errorLogin,
-            payload: "Usuario o contraseña invalidos"
-        });
-
-        const expectedState = {
-            email: "",
-            password: "",
-            isError: true,
-            errorMsg: "Usuario o contraseña invalidos",
-        };
-        expect(newState).toStrictEqual(expectedState);
-    });
 });

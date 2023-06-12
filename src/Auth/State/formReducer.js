@@ -5,7 +5,7 @@ export const actions = {
     errorLogin: 3,
 }
 
-export const loginReducer = (state, action) => {
+export const formReducer = (state, action) => {
     switch (action.type) {
         case actions.setEmail:
             return {

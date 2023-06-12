@@ -5,3 +5,4 @@ export const reportCountUrl = baseUrl + "/reportcount/";
 export const tokensUrl = baseUrl + "/tokens/";
 export const registerUrl = baseUrl + "/new_user/";
 export const reconfirmUrl = baseUrl + "/confirm";
+export const confirmUrl = baseUrl + "/confirm/"
