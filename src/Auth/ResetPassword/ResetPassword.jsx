@@ -9,17 +9,9 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-import {validatePassword} from "../Validate/validation.js";
-import {FailAlert, resetUrl, SuccessAlert} from "../../shared/index.js";
+import {formPasswordValidation} from "../Validate/validation.js";
+import {FailAlert, resetPasswordUrl, SuccessAlert} from "../../shared/index.js";
 
-const validate = (values) => {
-    const errors = {}
-    const passwordErrors = validatePassword(values.password);
-    if (passwordErrors){
-        errors.password = passwordErrors;
-    }
-    return errors;
-}
 
 const ResetPassword = () => {
     const [response, setResponse] = useState({
@@ -31,7 +23,7 @@ const ResetPassword = () => {
     const handleSubmit = async (values) => {
         try {
             await axios.post(
-                resetUrl + token,
+                resetPasswordUrl + token,
                 {
                     email: values.email,
                     password: values.password,
@@ -53,7 +45,7 @@ const ResetPassword = () => {
         initialValues: {
             password: "",
         },
-        validate,
+        validate: formPasswordValidation,
         onSubmit: async (values) => await handleSubmit(values),
     })
 

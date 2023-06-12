@@ -36,3 +36,26 @@ export const validateEmail = (email) => {
     }
     return emailError;
 };
+
+export const formPasswordValidation = (values) => {
+    const errors = {}
+    const passwordErrors = validatePassword(values.password);
+    if (passwordErrors){
+        errors.password = passwordErrors;
+    }
+    return errors;
+};
+
+
+export const formEmailAndPasswordValidation = (values) => {
+    const errors = {}
+    const emailErrors = validateEmail(values.email);
+    if (emailErrors){
+        errors.email = emailErrors;
+    }
+    const passwordErrors = validatePassword(values.password);
+    if (passwordErrors){
+        errors.password = passwordErrors;
+    }
+    return errors;
+};

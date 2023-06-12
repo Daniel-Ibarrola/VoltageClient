@@ -10,3 +10,13 @@
 .navbar > a:hover {
     color: white;
 }
+
+.nav-dropdown > a {
+    color: snow!important;
+    text-decoration: none;
+}
+
+.nav-dropdown-item > a {
+    color: white;
+    text-decoration: none;
+}

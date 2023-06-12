@@ -25,7 +25,7 @@ const Reset = () => {
             type: actions.setEmail,
             payload: event.target.value
         });
-    }
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -44,7 +44,6 @@ const Reset = () => {
                 payload: <p><strong>Error: </strong>email no pertenece a ninguna cuenta</p>
             });
         }
-
     }
 
     return (

@@ -6,3 +6,4 @@ export * from "./Protected/Protected.jsx"
 export * from "./Register/Register.jsx";
 export * from "./Reset/Reset.jsx";
 export * from "./ResetPassword/ResetPassword.jsx";
+export * from "./ChangePass/ChangePass.jsx";

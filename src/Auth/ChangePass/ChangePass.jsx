@@ -1,6 +1,6 @@
+import {useContext, useState} from "react";
 import axios from "axios";
 import {useFormik} from "formik";
-import {useState} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -8,92 +8,81 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-import {FailAlert, registerUrl, SuccessAlert} from "../../shared/index.js";
-import {formEmailAndPasswordValidation} from "../Validate/validation.js";
-import "../style.css"
+import {FailAlert, SuccessAlert, changePasswordUrl} from "../../shared/index.js";
+import {formPasswordValidation} from "../Validate/validation.js";
+import AuthContext from "../Context/AuthProvider.jsx";
 
-
-const Register = () => {
-
+const ChangePass = () => {
     const [response, setResponse] = useState({
         error: false,
         msg: null,
     });
 
+    const { token } = useContext(AuthContext);
+
     const handleSubmit = async (values) => {
         try {
             await axios.post(
-                registerUrl,
+                changePasswordUrl,
                 {
-                    email: values.email,
-                    password: values.password,
-                }
+                    old: values.oldPassword,
+                    new: values.password,
+                },
+                {headers: {Authorization: `Bearer ${token}`}}
             );
             setResponse({
                 error: false,
-                msg: <p>Se ha enviado un email de confirmación.</p>
+                msg: <p><strong>Éxito: </strong>se actualizó la contraseña</p>
             })
-        } catch (err) {
-            if (err.response){
-                if (err.response?.status === 400){
-                    setResponse({
-                        error: true,
-                        msg: <p><strong>Error:</strong> email en uso</p>
-                    });
-                } else if (err.response?.status === 401){
-                    setResponse({
-                        error: true,
-                        msg: <p><strong>Error:</strong> email inválido</p>
-                    });
-                }
-            }
+        } catch {
+            setResponse({
+                error: true,
+                msg: <p><strong>Error: </strong>contraseña incorrecta</p>
+            });
         }
+
     }
 
     const formik = useFormik({
         initialValues: {
-            email: "",
+            oldPassword: "",
             password: "",
         },
-        validate: formEmailAndPasswordValidation,
+        validate: formPasswordValidation,
         onSubmit: async (values) => await handleSubmit(values),
-    });
+    })
 
     return (
         <Container>
             <Row className="justify-content-center">
                 <Col md={{span: 6}}>
                     <Card className="login-card">
-                        <Card.Title className="login-title">Registrarse</Card.Title>
+                        <Card.Title className="login-title">Cambiar contraseña</Card.Title>
                         <hr />
                         <Card.Body className="login-body">
                             <Form noValidate onSubmit={formik.handleSubmit}>
                                 <Form.Group>
-                                    <Form.Label htmlFor="email">Correo</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        placeholder="Email"
-                                        id="email"
-                                        onChange={formik.handleChange}
-                                        value={formik.values.email}
-                                        className="login-row"
-                                        isValid={formik.touched.email && !formik.errors.email}
-                                        isInvalid={formik.errors.hasOwnProperty("email")}
-                                    />
-                                    <Form.Control.Feedback className="form-error" type="invalid">
-                                        {formik.errors.email}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group>
-                                    <Form.Label htmlFor="password">Contraseña</Form.Label>
+                                    <Form.Label htmlFor="email">Contraseña actual</Form.Label>
                                     <Form.Control
                                         type="password"
                                         placeholder="Contraseña"
+                                        id="oldPassword"
+                                        className="login-row"
+                                        onChange={formik.handleChange}
+                                        value={formik.values.oldPassword}
+                                    />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label htmlFor="password">Nueva contraseña</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Nueva contraseña"
                                         id="password"
                                         className="login-row"
                                         onChange={formik.handleChange}
                                         value={formik.values.password}
-                                        isValid={formik.touched.password && !formik.errors.password}
+                                        isValid={formik.touched.password
+                                            && !formik.errors.password}
                                         isInvalid={formik.errors.hasOwnProperty("password")}
                                     />
                                     <Form.Control.Feedback className="form-error" type="invalid">
@@ -104,7 +93,7 @@ const Register = () => {
                                     <Button
                                         type="submit"
                                     >
-                                        Crear cuenta
+                                        Cambiar contraseña
                                     </Button>
                                 </div>
                                 {(response.error && response.msg) && <FailAlert>{response.msg}</FailAlert>}
@@ -118,4 +107,4 @@ const Register = () => {
     )
 };
 
-export { Register };
+export { ChangePass };

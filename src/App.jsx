@@ -1,12 +1,15 @@
 import { useContext } from "react";
 import {Route, Routes, Link, Navigate} from "react-router-dom";
 import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import NavDropdown from "react-bootstrap/NavDropdown";
 import RBNavbar from "react-bootstrap/Navbar";
 
 import { Stations } from "./Stations/index.js";
 import { Station } from "./Station/index.js";
 import {
     Confirm,
+    ChangePass,
     Login,
     Logout,
     Protected,
@@ -20,6 +23,29 @@ import AuthContext from "./Auth/Context/AuthProvider.jsx";
 const NoMatch = () => {
     return <h1>Aqui no hay nada: 404</h1>
 }
+
+
+const UserDropDown = () => {
+  return (
+      <RBNavbar.Collapse className={"justify-content-end"}>
+          <Nav>
+              <NavDropdown
+                  title={"Cuenta"}
+                  menuVariant="dark"
+                  className="nav-dropdown"
+              >
+                  <NavDropdown.Item className="nav-dropdown-item">
+                      <Link to={"/change"}>Cambiar contraseña</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item className="nav-dropdown-item">
+                      <Link to={"/logout"}>Cerrar sesión</Link>
+                  </NavDropdown.Item>
+              </NavDropdown>
+          </Nav>
+      </RBNavbar.Collapse>
+
+  )
+};
 
 
 const NavBar = () => {
@@ -40,11 +66,7 @@ const NavBar = () => {
                     /> Monitor de Estaciones
                 </Link>
             </RBNavbar.Brand>
-            {token &&
-                <RBNavbar.Collapse className="justify-content-end">
-                    <Link to={"/logout"}>Cerrar sesión</Link>
-                </RBNavbar.Collapse>
-            }
+            {token && <UserDropDown />}
         </Container>
     </RBNavbar>
     );
@@ -86,6 +108,14 @@ const App = () => {
                         <Station fetchTime={fetchTime} />
                     </Protected>
                 }
+                />
+                <Route
+                    path="change"
+                    element={
+                        <Protected>
+                            <ChangePass />
+                        </Protected>
+                    }
                 />
                 <Route path="login" element={<Login />} />
                 <Route path="logout" element={<Logout />} />
