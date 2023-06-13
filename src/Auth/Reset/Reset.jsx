@@ -12,7 +12,7 @@ import {actions, formReducer} from "../State/formReducer.js";
 import {FailAlert, resetUrl} from "../../shared/index.js";
 
 const Reset = () => {
-
+    // Request a password reset
     const [loginData, dispatchLoginData] = useReducer(formReducer, {
         email: "",
         password: "",

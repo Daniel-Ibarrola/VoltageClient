@@ -25,7 +25,6 @@ const ResetPassword = () => {
             await axios.post(
                 resetPasswordUrl + token,
                 {
-                    email: values.email,
                     password: values.password,
                 }
             );
