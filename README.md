@@ -1,3 +1,7 @@
 # Voltage client
 
-Client for the voltage app
+Website to monitor and get insights of SASMEX seismic stations.
+
+## Installation 
+
+## Dev
