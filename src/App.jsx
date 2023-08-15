@@ -65,7 +65,7 @@ const NavBar = () => {
                 <Link to={"/stations"}>
                     <img
                         alt=""
-                        src="../public/cires.png"
+                        src="cires.png"
                         width="50"
                         height="50"
                         className="d-inline-block align-top"

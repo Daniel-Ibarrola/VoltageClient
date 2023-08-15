@@ -11,10 +11,8 @@ dist/
 server/
 
 # Docker
-docker-compose.prod.yaml
 docker-compose.yaml
 Dockerfile
-Dockerfile-prod
 
 # Others
 Makefile
