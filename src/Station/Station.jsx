@@ -7,7 +7,7 @@ import Row from "react-bootstrap/Row";
 
 import AuthContext from "../Auth/Context/AuthProvider.jsx";
 import station_names from "../shared/station_names.js";
-import { reportCountUrl, stationsUrl } from "../shared/api.js";
+import { reportsUrl } from "../shared/api.js";
 import { FailAlert, LoadSpinner } from "../shared/index.js";
 import { actions, stationDataReducer } from "./stationReducer.js";
 import { VoltageChart } from "./Chart/index.js";
@@ -40,6 +40,7 @@ const Station = () => {
 
     let initialDate = getDateWithDelta(new Date(Date.now()), 7);
     const [urlParams, setUrlParams] = useState({
+        // TODO: pass parameters to axios.get
         voltages: `?startdate=${initialDate}`,
         reports: `?startdate=${initialDate}`,
     });
@@ -60,11 +61,11 @@ const Station = () => {
         const requestData = [
             {
                 action: actions.successFetchStations,
-                url: stationsUrl + stationName + urlParams.voltages
+                url: reportsUrl + stationName + urlParams.voltages
             },
             {action:
                 actions.successFetchReportCount,
-                url: reportCountUrl + stationName + urlParams.reports
+                url: reportsUrl + stationName + "/counts/" +  urlParams.reports
             },
         ]
         for (let ii = 0; ii < requestData.length; ii++){

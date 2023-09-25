@@ -9,7 +9,7 @@ import AuthContext from "../Auth/Context/AuthProvider.jsx";
 import { actions, stationsReducer } from "./stationsReducer.js";
 import { Table } from "./Table/index.js";
 import { SearchForm } from "./SearchForm/index.js";
-import {lastReportsUrl, Notifications} from "../shared/index.js";
+import {reportsUrl, Notifications} from "../shared/index.js";
 import { LoadSpinner, FailAlert } from "../shared/index.js";
 import './style.css'
 
@@ -34,7 +34,7 @@ const Stations = ({ fetchTime }) => {
         dispatchStations({type: actions.initFetch});
         try {
             const result = await axios.get(
-                lastReportsUrl,
+                reportsUrl,
                 {headers: {Authorization: `Bearer ${token}`}}
             );
             dispatchStations({

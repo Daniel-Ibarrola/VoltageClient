@@ -88,9 +88,9 @@ describe("Station", () => {
         const reportsPromise = Promise.resolve({data: reports})
 
         axios.get.mockImplementation((url) => {
-            if (url.includes("reportcount"))
+            if (url.includes("counts"))
                 return reportsPromise;
-            if (url.includes("station"))
+            if (url.includes("reports"))
                 return voltagePromise;
             throw Error();
         });
