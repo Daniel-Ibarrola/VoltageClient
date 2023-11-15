@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+apiGateway-js-sdk/
+api_user.txt
+
+.env
+.env.prod

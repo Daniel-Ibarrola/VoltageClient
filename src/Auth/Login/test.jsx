@@ -23,7 +23,7 @@ const waitForFormSubmission = async (promise) => {
     fireEvent.change(screen.getByPlaceholderText("Contraseña"), {
         target: {value: "6MonkeysRLooking^"}
     });
-    fireEvent.click(screen.getByRole("button"));
+    fireEvent.click(screen.getAllByRole("button")[0]);
     await waitFor(async () => await promise);
 }
 

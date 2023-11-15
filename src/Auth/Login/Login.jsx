@@ -97,6 +97,16 @@ const Login = () => {
         }
     }
 
+    const handleSkipLogin = () => {
+        // Skip login when developing
+        if (import.meta.env.DEV){
+            setToken({
+                "token": "testToken",
+                "expiration": null
+            })
+        }
+    }
+
     return (
         <Container>
             <Row className="justify-content-center">
@@ -157,6 +167,15 @@ const Login = () => {
                                     <FailAlert className="login-row">
                                         {loginData.errorMsg}
                                     </FailAlert>
+                                }
+                                {import.meta.env.DEV &&
+                                    <Button
+                                        variant="danger"
+                                        onClick={handleSkipLogin}
+                                    >
+                                        Skip login
+                                    </Button>
+
                                 }
                             </Card.Body>
                         </Card>
