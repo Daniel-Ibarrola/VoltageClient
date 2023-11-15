@@ -1,6 +1,15 @@
 version: "3"
 
 services:
-  voltage:
+
+  voltage-client:
     build:
-     context: .
+      dockerfile: Dockerfile
+    image: voltage-client-dev:latest
+    container_name: voltage-client
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
