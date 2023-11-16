@@ -1,5 +1,4 @@
 import { useReducer, useContext } from "react";
-import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
@@ -11,7 +10,8 @@ import { Link, Navigate } from "react-router-dom";
 import AuthContext from "../../context/AuthProvider.jsx";
 import { FailAlert } from "../../components/index.js";
 import { loginReducer, LOGIN_ACTIONS } from "../../reducers/index.js";
-import { tokensUrl } from "../../services/index.js";
+import { logInUser } from "../../services/index.js";
+
 import "./style.css";
 
 
@@ -50,51 +50,51 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        try {
-            const response = await axios.post(
-                tokensUrl,
-                {},
-                { auth: {
-                    username: loginData.email,
-                    password: loginData.password,
-                }
-            });
-            dispatchLoginData({
-                type: LOGIN_ACTIONS.successLogin,
-            });
-            const token = response.data.token;
-            saveToken(token);
-            setToken(token);
-        } catch (err) {
-            let errMsg = null;
-            if (!err?.response){
-                errMsg = <p><strong>Error:</strong> Sin respuesta del servidor</p>
-            }
-            else if (err.response?.status === 400) {
-                errMsg = (
-                    <div>
-                        <p><strong>Error:</strong> Usuario no confirmado</p>
-                        <Link
-                            to={"/reconfirm"}
-                            state={{email: loginData.email, password: loginData.password}}
-                        >
-                            Click aquí para reenviar email de confirmación
-                        </Link>
-                    </div>
-
-                )
-            }
-            else if (err.response?.status === 401) {
-                errMsg = <p><strong>Error:</strong> Usuario o contraseña inválidos</p>
-            }
-            else {
-                errMsg = <p><strong>Error:</strong> Falló el inicio de sesión</p>
-            }
-            dispatchLoginData({
-                type: LOGIN_ACTIONS.errorLogin,
-                payload: errMsg,
-            });
-        }
+        // try {
+        //     const response = await axios.post(
+        //         tokensUrl,
+        //         {},
+        //         { auth: {
+        //             username: loginData.email,
+        //             password: loginData.password,
+        //         }
+        //     });
+        //     dispatchLoginData({
+        //         type: LOGIN_ACTIONS.successLogin,
+        //     });
+        //     const token = response.data.token;
+        //     saveToken(token);
+        //     setToken(token);
+        // } catch (err) {
+        //     let errMsg = null;
+        //     if (!err?.response){
+        //         errMsg = <p><strong>Error:</strong> Sin respuesta del servidor</p>
+        //     }
+        //     else if (err.response?.status === 400) {
+        //         errMsg = (
+        //             <div>
+        //                 <p><strong>Error:</strong> Usuario no confirmado</p>
+        //                 <Link
+        //                     to={"/reconfirm"}
+        //                     state={{email: loginData.email, password: loginData.password}}
+        //                 >
+        //                     Click aquí para reenviar email de confirmación
+        //                 </Link>
+        //             </div>
+        //
+        //         )
+        //     }
+        //     else if (err.response?.status === 401) {
+        //         errMsg = <p><strong>Error:</strong> Usuario o contraseña inválidos</p>
+        //     }
+        //     else {
+        //         errMsg = <p><strong>Error:</strong> Falló el inicio de sesión</p>
+        //     }
+        //     dispatchLoginData({
+        //         type: LOGIN_ACTIONS.errorLogin,
+        //         payload: errMsg,
+        //     });
+        // }
     }
 
     const handleSkipLogin = () => {

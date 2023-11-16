@@ -1,20 +1,16 @@
-import axios from "axios";
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
+import { NotAuthorizedException } from "@aws-sdk/client-cognito-identity-provider";
 
 import { Login } from "../Login.jsx";
+import { logInUser } from "../../../services/index.js";
 
 
-vi.mock("axios");
+vi.mock("../../../services/index.js", () => ({
+    logInUser: vi.fn()
+}));
 
-const rejectedPromise = (statusCode) => {
-    return Promise.reject({
-        response: {
-            status: statusCode,
-        }
-    });
-}
 
 const waitForFormSubmission = async (promise) => {
     fireEvent.change(screen.getByPlaceholderText("Email"), {
@@ -29,64 +25,54 @@ const waitForFormSubmission = async (promise) => {
 
 
 describe("Login", () => {
-    // it("Successful login redirects to stations page", async () => {
-    //     const promise = Promise.resolve({
-    //         data: {
-    //             token: "FakeToken",
-    //             expiration: 3600,
-    //         }});
-    //     axios.post.mockImplementationOnce(() => promise);
-    //
-    //     const routes = [
-    //         {
-    //             path: "/login",
-    //             element: <AuthProvider><Login /></AuthProvider>,
-    //         },
-    //         {
-    //             path: "/stations",
-    //             element: <Home />
-    //         }
-    //     ]
-    //     const router = createMemoryRouter(routes, {
-    //        initialEntries: ["/login"],
-    //        initialIndex: 0,
-    //     });
-    //
-    //     render(<RouterProvider router={router} />);
-    //     expect(screen.queryAllByText(/Iniciar/)[0]).toBeInTheDocument();
-    //
-    //     await waitFor(async () =>  fireEvent.click(
-    //         screen.queryByRole("button"))
-    //     );
-    //     await waitFor(async () => await promise);
-    //     expect(screen.queryByText("Estaciones")).toBeInTheDocument();
-    // });
-
-    it("Invalid credentials display error", async () => {
-        const promise = rejectedPromise(401);
-        axios.post.mockImplementationOnce(() => promise);
+    it("Successful login", async () => {
+        const response = {
+            ChallengeParameters: {},
+            AuthenticationResult: {
+                AccessToken: "FakeAccessToken",
+                ExpiresIn: 3600,
+                TokenType: "Bearer",
+                RefreshToken: "FakeRefreshToken",
+                IdToken: "FakeIdToken"
+            }
+        };
+        const promise = Promise.resolve(response);
+        logInUser.mockImplementationOnce(() => promise);
 
         render(<BrowserRouter><Login /></BrowserRouter>);
+        await waitForFormSubmission(promise);
 
-        try {
-            await waitForFormSubmission(promise);
-        } catch (error) {
-            expect(screen.queryByText(/Usuario o contraseña inválidos/)).toBeInTheDocument();
-        }
+        expect(screen.queryByText(/Cuenta/)).toBeInTheDocument();
     });
 
-    it("Unconfirmed user displays re-send confirmation link", async () => {
-        const promise = rejectedPromise(400);
-        axios.post.mockImplementationOnce(() => promise);
+    it("Invalid credentials display error", async () => {
+        logInUser.mockImplementationOnce(() => { throw NotAuthorizedException });
+
+        render(<BrowserRouter><Login /></BrowserRouter>);
+        fireEvent.change(screen.getByPlaceholderText("Email"), {
+            target: {value: "triton@example.com"}
+        });
+        fireEvent.change(screen.getByPlaceholderText("Contraseña"), {
+            target: {value: "6MonkeysRLooking^"}
+        });
+        fireEvent.click(screen.getAllByRole("button")[0]);
+
+        expect(screen.queryByText(/Usuario o contraseña inválidos/)).toBeInTheDocument();
+    });
+
+    it("New user needs to update password", async () => {
+        const response = {
+            ChallengeName: "NEW_PASSWORD_REQUIRED",
+            Session: "FakeSession",
+            ChallengeParameters: {},
+        }
+        const promise = Promise.resolve(response);
+        logInUser.mockImplementationOnce(() => promise);
 
         render(<BrowserRouter><Login /></BrowserRouter>);
 
-        try {
-            await waitForFormSubmission(promise);
-        } catch (error) {
-            expect(screen.queryByText(/no confirmado/)).toBeInTheDocument();
-            expect(screen.queryByText(/reenviar email de confirmación/)).toBeInTheDocument();
-        }
+        await waitForFormSubmission(promise);
+        expect(screen.queryByText(/debe actualizar su contraseña/));
     });
 
 });
