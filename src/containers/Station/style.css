@@ -1,0 +1,44 @@
+.chart {
+    padding: 10px;
+}
+
+.chart-card {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.dropdown-btn > button {
+    background-color: #212f3d;
+    border-color: #212f3d;
+    --bs-btn-active-bg:  #1c2833;
+    --bs-btn-active-border-color:  #1c2833;
+}
+
+.dropdown-btn > button:hover {
+    background-color: #1c2833;
+    border-color: #1c2833;
+}
+
+.stats-card {
+    margin-top: 10px;
+}
+
+.stats-title {
+    font-size: 1.6em;
+}
+
+.stats-subtitle {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.3em;
+}
+
+.stats-text {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.stats-footer {
+    margin-top: 0.3em;
+    font-size: 0.8em;
+}
