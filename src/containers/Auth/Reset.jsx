@@ -18,13 +18,12 @@ const Reset = () => {
     const [loginData, dispatchLoginData] = useReducer(loginReducer, {
         email: "",
         password: "",
-        isError: false,
-        errorMsg: null,
+        errorMsg: "",
     });
 
     const handleEmailChange = (event) => {
         dispatchLoginData({
-            type: LOGIN_ACTIONS.setEmail,
+            type: LOGIN_ACTIONS.SET_EMAIL,
             payload: event.target.value
         });
     };
@@ -38,11 +37,11 @@ const Reset = () => {
             );
             alert("Se ha enviado un email de confirmación");
             dispatchLoginData({
-                type: LOGIN_ACTIONS.successLogin
+                type: LOGIN_ACTIONS.SUCCESS
             })
         } catch (err) {
             dispatchLoginData({
-                type: LOGIN_ACTIONS.errorLogin,
+                type: LOGIN_ACTIONS.ERROR,
                 payload: <p><strong>Error: </strong>email no pertenece a ninguna cuenta</p>
             });
         }
@@ -82,7 +81,7 @@ const Reset = () => {
                                     </Button>
                                 </div>
                             </Form>
-                            {loginData.isError &&
+                            {loginData.errorMsg &&
                                 <FailAlert className="login-row">
                                     {loginData.errorMsg}
                                 </FailAlert>

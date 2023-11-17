@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import { NotAuthorizedException } from "@aws-sdk/client-cognito-identity-provider";
 
+import { AuthProvider } from "../../../context/AuthProvider.jsx";
 import { Login } from "../Login.jsx";
 import { logInUser } from "../../../services/index.js";
 
@@ -12,67 +12,67 @@ vi.mock("../../../services/index.js", () => ({
 }));
 
 
-const waitForFormSubmission = async (promise) => {
-    fireEvent.change(screen.getByPlaceholderText("Email"), {
-        target: {value: "triton@example.com"}
-    });
-    fireEvent.change(screen.getByPlaceholderText("Contraseña"), {
-        target: {value: "6MonkeysRLooking^"}
-    });
-    fireEvent.click(screen.getAllByRole("button")[0]);
-    await waitFor(async () => await promise);
-}
-
-
 describe("Login", () => {
-    it("Successful login", async () => {
-        const response = {
-            ChallengeParameters: {},
-            AuthenticationResult: {
-                AccessToken: "FakeAccessToken",
-                ExpiresIn: 3600,
-                TokenType: "Bearer",
-                RefreshToken: "FakeRefreshToken",
-                IdToken: "FakeIdToken"
-            }
-        };
-        const promise = Promise.resolve(response);
-        logInUser.mockImplementationOnce(() => promise);
 
-        render(<BrowserRouter><Login /></BrowserRouter>);
-        await waitForFormSubmission(promise);
-
-        expect(screen.queryByText(/Cuenta/)).toBeInTheDocument();
-    });
-
-    it("Invalid credentials display error", async () => {
-        logInUser.mockImplementationOnce(() => { throw NotAuthorizedException });
-
-        render(<BrowserRouter><Login /></BrowserRouter>);
-        fireEvent.change(screen.getByPlaceholderText("Email"), {
+    const waitForFormSubmission = async (promise) => {
+        fireEvent.change(screen.getByPlaceholderText("Correo"), {
             target: {value: "triton@example.com"}
         });
         fireEvent.change(screen.getByPlaceholderText("Contraseña"), {
             target: {value: "6MonkeysRLooking^"}
         });
         fireEvent.click(screen.getAllByRole("button")[0]);
+        await waitFor(async () => await promise);
+    }
+
+
+    it("Successful login", async () => {
+        const loginResponse = {
+            token: "FakeToken",
+            error: false,
+            message: "",
+            session: "",
+        };
+        const promise = Promise.resolve(loginResponse);
+        logInUser.mockImplementationOnce(() => promise);
+
+        render(<BrowserRouter><AuthProvider><Login /></AuthProvider></BrowserRouter>);
+        await waitForFormSubmission(promise);
+
+        const token = JSON.parse(localStorage.getItem("token"));
+        expect(token).toBe("FakeToken");
+    });
+
+    it("Invalid credentials display error", async () => {
+        const loginResponse = {
+            token: "",
+            error: true,
+            message: "Usuario o contraseña inválidos",
+            session: ""
+        }
+        const promise = Promise.resolve(loginResponse);
+        logInUser.mockImplementationOnce(() => promise);
+
+        render(<BrowserRouter><Login /></BrowserRouter>);
+        await waitForFormSubmission(promise);
 
         expect(screen.queryByText(/Usuario o contraseña inválidos/)).toBeInTheDocument();
     });
 
     it("New user needs to update password", async () => {
-        const response = {
-            ChallengeName: "NEW_PASSWORD_REQUIRED",
-            Session: "FakeSession",
-            ChallengeParameters: {},
+        const loginResponse = {
+            token: "",
+            error: false,
+            message: "",
+            session: "FakeSession"
         }
-        const promise = Promise.resolve(response);
+        const promise = Promise.resolve(loginResponse);
         logInUser.mockImplementationOnce(() => promise);
 
         render(<BrowserRouter><Login /></BrowserRouter>);
-
         await waitForFormSubmission(promise);
-        expect(screen.queryByText(/debe actualizar su contraseña/));
+
+        expect(screen.queryByText(/actualizar la contraseña/)).toBeInTheDocument();
     });
 
 });

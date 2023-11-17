@@ -8,7 +8,7 @@ import Row from "react-bootstrap/Row";
 import { Link, Navigate } from "react-router-dom";
 
 import AuthContext from "../../context/AuthProvider.jsx";
-import { FailAlert } from "../../components/index.js";
+import { SuccessAlert, FailAlert } from "../../components/index.js";
 import { loginReducer, LOGIN_ACTIONS } from "../../reducers/index.js";
 import { logInUser } from "../../services/index.js";
 
@@ -20,10 +20,10 @@ const Login = () => {
     const [loginData, dispatchLoginData] = useReducer(loginReducer, {
         email: "",
         password: "",
-        isError: false,
-        errorMsg: null,
+        errorMsg: "",
+        session: ""
     });
-    const { token, setToken } = useContext(AuthContext);
+    const { token, updateToken } = useContext(AuthContext);
 
     if (token) {
         return <Navigate to="/"/>
@@ -31,79 +31,44 @@ const Login = () => {
 
     const handleEmailChange = (event) => {
         dispatchLoginData({
-            type: LOGIN_ACTIONS.setEmail,
+            type: LOGIN_ACTIONS.SET_EMAIL,
             payload: event.target.value
         });
     }
 
     const handlePasswordChange = (event) => {
         dispatchLoginData({
-            type: LOGIN_ACTIONS.setPassword,
+            type: LOGIN_ACTIONS.SET_PASSWORD,
             payload: event.target.value
         });
-    }
-
-    const saveToken = (userToken) => {
-        localStorage.setItem("token", JSON.stringify(userToken));
     }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // try {
-        //     const response = await axios.post(
-        //         tokensUrl,
-        //         {},
-        //         { auth: {
-        //             username: loginData.email,
-        //             password: loginData.password,
-        //         }
-        //     });
-        //     dispatchLoginData({
-        //         type: LOGIN_ACTIONS.successLogin,
-        //     });
-        //     const token = response.data.token;
-        //     saveToken(token);
-        //     setToken(token);
-        // } catch (err) {
-        //     let errMsg = null;
-        //     if (!err?.response){
-        //         errMsg = <p><strong>Error:</strong> Sin respuesta del servidor</p>
-        //     }
-        //     else if (err.response?.status === 400) {
-        //         errMsg = (
-        //             <div>
-        //                 <p><strong>Error:</strong> Usuario no confirmado</p>
-        //                 <Link
-        //                     to={"/reconfirm"}
-        //                     state={{email: loginData.email, password: loginData.password}}
-        //                 >
-        //                     Click aquí para reenviar email de confirmación
-        //                 </Link>
-        //             </div>
-        //
-        //         )
-        //     }
-        //     else if (err.response?.status === 401) {
-        //         errMsg = <p><strong>Error:</strong> Usuario o contraseña inválidos</p>
-        //     }
-        //     else {
-        //         errMsg = <p><strong>Error:</strong> Falló el inicio de sesión</p>
-        //     }
-        //     dispatchLoginData({
-        //         type: LOGIN_ACTIONS.errorLogin,
-        //         payload: errMsg,
-        //     });
-        // }
+        const loginResponse = await logInUser(loginData.errorMsg, loginData.password);
+        if (loginResponse.error){
+            dispatchLoginData({
+                type: LOGIN_ACTIONS.ERROR,
+                payload: loginResponse.message
+            });
+        } else if (!loginResponse.error && loginResponse.token){
+            dispatchLoginData({
+                type: LOGIN_ACTIONS.SUCCESS,
+            });
+            updateToken(loginResponse.token);
+        } else {
+            dispatchLoginData({
+                type: LOGIN_ACTIONS.UPDATE_PASSWORD,
+                payload: loginResponse.session
+            });
+        }
     }
 
     const handleSkipLogin = () => {
         // Skip login when developing
         if (import.meta.env.DEV){
-            setToken({
-                "token": "testToken",
-                "expiration": null
-            })
+            updateToken({"token": "testToken"});
         }
     }
 
@@ -125,7 +90,7 @@ const Login = () => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="email"
-                                                placeholder={"Email"}
+                                                placeholder="Correo"
                                                 id="email"
                                                 onChange={handleEmailChange}
                                                 required
@@ -163,9 +128,14 @@ const Login = () => {
                                     <Card.Text>
                                         <Link to="/resetpassword">¿Olvidó su contraseña?</Link>
                                     </Card.Text>
-                                {loginData.isError &&
+                                {loginData.session &&
+                                    <SuccessAlert className="login-row">
+                                        Se requiere actualizar la contraseña
+                                    </SuccessAlert>
+                                }
+                                {loginData.errorMsg &&
                                     <FailAlert className="login-row">
-                                        {loginData.errorMsg}
+                                        <p><strong>Error:</strong> {loginData.errorMsg}</p>
                                     </FailAlert>
                                 }
                                 {import.meta.env.DEV &&
@@ -175,7 +145,6 @@ const Login = () => {
                                     >
                                         Skip login
                                     </Button>
-
                                 }
                             </Card.Body>
                         </Card>

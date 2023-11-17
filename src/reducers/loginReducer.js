@@ -1,34 +1,40 @@
 export const LOGIN_ACTIONS = {
-    setEmail: 0,
-    setPassword: 1,
-    successLogin: 2,
-    errorLogin: 3,
+    SET_EMAIL: 0,
+    SET_PASSWORD: 1,
+    UPDATE_PASSWORD: 2,
+    SUCCESS: 3,
+    ERROR: 4,
 }
 
 export const loginReducer = (state, action) => {
     switch (action.type) {
-        case LOGIN_ACTIONS.setEmail:
+        case LOGIN_ACTIONS.SET_EMAIL:
             return {
               ...state,
               email: action.payload
             };
-        case LOGIN_ACTIONS.setPassword:
+        case LOGIN_ACTIONS.SET_PASSWORD:
             return {
                 ...state,
                 password: action.payload,
             };
-        case LOGIN_ACTIONS.successLogin:
+        case LOGIN_ACTIONS.UPDATE_PASSWORD:
+            return {
+                ...state,
+                session: action.payload
+            }
+        case LOGIN_ACTIONS.SUCCESS:
             return {
                 ...state,
                 email: "",
                 password: "",
-                isError: false,
+                errorMsg: "",
             };
-        case LOGIN_ACTIONS.errorLogin:
+        case LOGIN_ACTIONS.ERROR:
             return {
+                ...state,
                 email: "",
                 password: "",
-                isError: true,
                 errorMsg: action.payload,
             };
         default:

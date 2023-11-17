@@ -3,23 +3,24 @@ import {LOGIN_ACTIONS, loginReducer} from "../loginReducer.js";
 
 
 describe("loginReducer", () => {
+
     it("Sets email", () => {
         const initialState = {
             email: "",
             password: "dog",
-            isError: false,
             errorMsg: "",
+            session: "",
         };
         const newState = loginReducer(initialState, {
-            type: LOGIN_ACTIONS.setEmail,
+            type: LOGIN_ACTIONS.SET_EMAIL,
             payload: "triton@example.com"
         });
 
         const expectedState = {
             email: "triton@example.com",
             password: "dog",
-            isError: false,
             errorMsg: "",
+            session: "",
         }
         expect(newState).toStrictEqual(expectedState);
     });
@@ -28,19 +29,19 @@ describe("loginReducer", () => {
         const initialState = {
             email: "triton@example.com",
             password: "",
-            isError: false,
             errorMsg: "",
+            session: "",
         };
         const newState = loginReducer(initialState, {
-            type: LOGIN_ACTIONS.setPassword,
+            type: LOGIN_ACTIONS.SET_PASSWORD,
             payload: "dog"
         });
 
         const expectedState = {
             email: "triton@example.com",
             password: "dog",
-            isError: false,
             errorMsg: "",
+            session: "",
         }
         expect(newState).toStrictEqual(expectedState);
     });
@@ -49,18 +50,18 @@ describe("loginReducer", () => {
         const initialState = {
             email: "triton@example.com",
             password: "dog",
-            isError: false,
             errorMsg: "",
+            session: "",
         };
         const newState = loginReducer(initialState, {
-            type: LOGIN_ACTIONS.successLogin
+            type: LOGIN_ACTIONS.SUCCESS
         });
 
         const expectedState = {
             email: "",
             password: "",
-            isError: false,
             errorMsg: "",
+            session: "",
         }
         expect(newState).toStrictEqual(expectedState);
     });
@@ -69,19 +70,40 @@ describe("loginReducer", () => {
         const initialState = {
             email: "triton@example.com",
             password: "dog",
-            isError: false,
             errorMsg: "",
+            session: "",
         };
         const newState = loginReducer(initialState, {
-            type: LOGIN_ACTIONS.errorLogin,
-            payload: "Usuario o contraseña invalidos"
+            type: LOGIN_ACTIONS.ERROR,
+            payload: "LoginError"
         });
 
         const expectedState = {
             email: "",
             password: "",
-            isError: true,
-            errorMsg: "Usuario o contraseña invalidos",
+            errorMsg: "LoginError",
+            session: "",
+        };
+        expect(newState).toStrictEqual(expectedState);
+    });
+
+    it("User needs to update password", () => {
+        const initialState = {
+            email: "triton@example.com",
+            password: "dog",
+            errorMsg: "",
+            session: "",
+        };
+        const newState = loginReducer(initialState, {
+            type: LOGIN_ACTIONS.UPDATE_PASSWORD,
+            payload: "FakeSession"
+        });
+
+        const expectedState = {
+            email: "triton@example.com",
+            password: "dog",
+            errorMsg: "",
+            session: "FakeSession",
         };
         expect(newState).toStrictEqual(expectedState);
     });

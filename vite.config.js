@@ -18,6 +18,7 @@ export default defineConfig({
         "./tests/setup.js",
     ],
     include: [
+      './src/*/*/*.test.{jsx,js}',
       './src/*/*/*/*.test.{jsx,js}'
     ]
   }

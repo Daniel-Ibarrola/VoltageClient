@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {getDataMax, getDataMin, getLastDate} from "../containers/Station/Statistics/stationStats.js";
+import {getDataMax, getDataMin, getLastDate} from "../stationStats.js";
 
 
 const data = [

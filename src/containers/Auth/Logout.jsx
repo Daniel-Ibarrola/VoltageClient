@@ -6,10 +6,8 @@ import AuthContext from "../../context/AuthProvider.jsx";
 
 const Logout = () => {
 
-    const { setToken } = useContext(AuthContext);
-    setToken("");
-    localStorage.clear();
-
+    const { clearToken } = useContext(AuthContext);
+    clearToken();
     return <Navigate to="/"/>
 };
 

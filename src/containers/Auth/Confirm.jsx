@@ -18,20 +18,19 @@ const Confirm = () => {
     const [loginData, dispatchLoginData] = useReducer(loginReducer, {
         email: "",
         password: "",
-        isError: false,
-        errorMsg: null,
+        errorMsg: "",
     });
 
     const handleEmailChange = (event) => {
         dispatchLoginData({
-            type: LOGIN_ACTIONS.setEmail,
+            type: LOGIN_ACTIONS.SET_EMAIL,
             payload: event.target.value
         });
     }
 
     const handlePasswordChange = (event) => {
         dispatchLoginData({
-            type: LOGIN_ACTIONS.setPassword,
+            type: LOGIN_ACTIONS.SET_PASSWORD,
             payload: event.target.value
         });
     }
@@ -54,10 +53,10 @@ const Confirm = () => {
             else if (response.data.confirmed === "account confirmed"){
                 alert("Su cuenta ha sido confirmada");
             }
-            dispatchLoginData({type: LOGIN_ACTIONS.successLogin});
+            dispatchLoginData({type: LOGIN_ACTIONS.SUCCESS});
         } catch (err) {
             dispatchLoginData({
-                type: LOGIN_ACTIONS.errorLogin,
+                type: LOGIN_ACTIONS.ERROR,
                 payload: <p><strong>Error:</strong> link inválido o expirado</p>
             })
         }
@@ -113,7 +112,7 @@ const Confirm = () => {
                                     </Button>
                                 </div>
                             </Form>
-                            {loginData.isError &&
+                            {loginData.errorMsg &&
                                 <FailAlert className="login-row">
                                     {loginData.errorMsg}
                                 </FailAlert>
