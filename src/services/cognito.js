@@ -5,23 +5,10 @@ import {
     InitiateAuthCommand,
     NotAuthorizedException,
     RespondToAuthChallengeCommand,
-    SignUpCommand,
     UserNotFoundException,
 } from "@aws-sdk/client-cognito-identity-provider";
 
 const CLIENT_ID = import.meta.env.VITE_COGNITO_CLIENT_ID;
-
-export const signUpUser = async (user, password) => {
-    const client = new CognitoIdentityProviderClient()
-    const input = {
-        ClientId: CLIENT_ID,
-        Username: user,
-        Password: password,
-    };
-    const command = new SignUpCommand(input);
-    return await client.send(command);
-}
-
 
 export const requestLogin = async (user, password) => {
     // Make a request to AWS Cognito to authenticate a user
