@@ -14,7 +14,6 @@ import {resetUrl} from "../../services/index.js";
 
 
 const Reset = () => {
-    // Request a password reset
     const [loginData, dispatchLoginData] = useReducer(loginReducer, {
         email: "",
         password: "",

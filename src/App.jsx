@@ -2,13 +2,10 @@ import { useContext } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import {
-    Confirm,
     ChangePass,
     Home,
     Login,
     Logout,
-    Reconfirm,
-    Register,
     Reset,
     ResetPassword,
     Station
@@ -69,11 +66,8 @@ const App = () => {
                 />
                 <Route path="login" element={<Login />} />
                 <Route path="logout" element={<Logout />} />
-                <Route path="register" element={<Register />} />
-                <Route path="confirm/:token" element={<Confirm />}/>
-                <Route path="reconfirm" element={<Reconfirm />} />
                 <Route path="resetpassword" element={<Reset />} />
-                <Route path="reset/:token" element={<ResetPassword />} />
+                <Route path="reset/:code" element={<ResetPassword />} />
                 <Route path="*" element={<NoMatch />} />
             </Routes>
         </>
