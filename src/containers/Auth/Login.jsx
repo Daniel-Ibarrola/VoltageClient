@@ -46,7 +46,7 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const loginResponse = await logInUser(loginData.errorMsg, loginData.password);
+        const loginResponse = await logInUser(loginData.email, loginData.password);
         if (loginResponse.error){
             dispatchLoginData({
                 type: LOGIN_ACTIONS.ERROR,
@@ -123,14 +123,12 @@ const Login = () => {
                                         </div>
                                     </Form>
                                     <Card.Text>
-                                        <Link to="/register">Crear una cuenta</Link>
-                                    </Card.Text>
-                                    <Card.Text>
                                         <Link to="/resetpassword">¿Olvidó su contraseña?</Link>
                                     </Card.Text>
                                 {loginData.session &&
                                     <SuccessAlert className="login-row">
-                                        Se requiere actualizar la contraseña
+                                        <p>Se requiere actualizar la contraseña.</p>
+                                        <Link to="/updatepassword">Click aquí</Link>
                                     </SuccessAlert>
                                 }
                                 {loginData.errorMsg &&

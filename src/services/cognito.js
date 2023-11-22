@@ -9,8 +9,7 @@ import {
     UserNotFoundException,
 } from "@aws-sdk/client-cognito-identity-provider";
 
-const CLIENT_ID = import.meta.env.COGNITO_CLIENT_ID
-
+const CLIENT_ID = import.meta.env.VITE_COGNITO_CLIENT_ID;
 
 export const signUpUser = async (user, password) => {
     const client = new CognitoIdentityProviderClient()
@@ -26,7 +25,7 @@ export const signUpUser = async (user, password) => {
 
 export const requestLogin = async (user, password) => {
     // Make a request to AWS Cognito to authenticate a user
-    const client = new CognitoIdentityProviderClient()
+    const client = new CognitoIdentityProviderClient({region: "us-east-2"});
     const input = {
         AuthParameters: {
             USERNAME: user,
