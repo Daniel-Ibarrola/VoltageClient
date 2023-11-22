@@ -13,7 +13,7 @@ import {LOGIN_ACTIONS, loginReducer} from "../../reducers/index.js";
 import {resetUrl} from "../../services/index.js";
 
 
-const Reset = () => {
+const RequestReset = () => {
     const [loginData, dispatchLoginData] = useReducer(loginReducer, {
         email: "",
         password: "",
@@ -96,4 +96,4 @@ const Reset = () => {
     )
 };
 
-export { Reset };
+export { RequestReset };

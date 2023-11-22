@@ -22,7 +22,7 @@ describe("ResetPassword", () => {
     const getMocks = (promise) => {
         axios.post.mockImplementationOnce(() => promise);
         useParams.mockImplementation(() => ({
-           token: "testToken",
+           code: "testCode",
         }));
     };
 

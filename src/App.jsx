@@ -6,9 +6,10 @@ import {
     Home,
     Login,
     Logout,
-    Reset,
+    RequestReset,
     ResetPassword,
-    Station
+    Station,
+    UpdatePassword
 } from "./containers/index.js";
 import AuthContext from "./context/AuthProvider.jsx";
 import { NavBar, Protected } from "./components/index.js";
@@ -66,7 +67,8 @@ const App = () => {
                 />
                 <Route path="login" element={<Login />} />
                 <Route path="logout" element={<Logout />} />
-                <Route path="resetpassword" element={<Reset />} />
+                <Route path="updatepassword/:session" element={<UpdatePassword />} />
+                <Route path="resetpassword" element={<RequestReset />} />
                 <Route path="reset/:code" element={<ResetPassword />} />
                 <Route path="*" element={<NoMatch />} />
             </Routes>

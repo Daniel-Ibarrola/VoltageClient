@@ -19,12 +19,12 @@ const ResetPassword = () => {
         error: false,
         msg: "",
     });
-    const { token } = useParams();
+    const { code } = useParams();
 
     const handleSubmit = async (values) => {
         try {
             await axios.post(
-                resetPasswordUrl + token,
+                resetPasswordUrl + code,
                 {
                     password: values.password,
                 }

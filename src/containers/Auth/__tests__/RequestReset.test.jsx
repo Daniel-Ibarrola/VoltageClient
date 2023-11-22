@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import axios from "axios";
-import {Reset} from "../Reset.jsx";
+import {RequestReset} from "../RequestReset.jsx";
 import {BrowserRouter} from "react-router-dom";
 
 vi.mock("axios");
 
-describe("Reset", () => {
+describe("RequestReset", () => {
     const waitForFormSubmission = async (promise) => {
         fireEvent.change(screen.getByPlaceholderText("Email"), {
             target: {value: "triton@example.com"}
@@ -20,7 +20,7 @@ describe("Reset", () => {
         axios.post.mockImplementationOnce(() => promise);
         window.alert = vi.fn();
 
-        render(<BrowserRouter><Reset /></BrowserRouter>);
+        render(<BrowserRouter><RequestReset /></BrowserRouter>);
         await waitForFormSubmission(promise);
         expect(window.alert).toHaveBeenCalledTimes(1);
     });
@@ -28,7 +28,7 @@ describe("Reset", () => {
     it("Unsuccessful reset displays message", async () => {
         const promise  = Promise.reject();
         axios.post.mockImplementationOnce(() => promise);
-        render(<BrowserRouter><Reset /></BrowserRouter>);
+        render(<BrowserRouter><RequestReset /></BrowserRouter>);
 
         try {
             await waitForFormSubmission(promise);
