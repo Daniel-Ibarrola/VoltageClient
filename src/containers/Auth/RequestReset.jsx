@@ -1,6 +1,5 @@
 import {useReducer} from "react";
 import {Link} from "react-router-dom";
-import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -10,7 +9,7 @@ import Button from "react-bootstrap/Button";
 
 import {FailAlert} from "../../components/index.js";
 import {LOGIN_ACTIONS, loginReducer} from "../../reducers/index.js";
-import {resetUrl} from "../../services/index.js";
+import {requestPasswordReset} from "../../services/index.js";
 
 
 const RequestReset = () => {
@@ -29,22 +28,19 @@ const RequestReset = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            await axios.post(
-                resetUrl,
-                {email: loginData.email}
-            );
+        const success = await requestPasswordReset(loginData.email);
+        if (success) {
             alert("Se ha enviado un email de confirmación");
             dispatchLoginData({
                 type: LOGIN_ACTIONS.SUCCESS
-            })
-        } catch (err) {
+            });
+        } else {
             dispatchLoginData({
                 type: LOGIN_ACTIONS.ERROR,
-                payload: <p><strong>Error: </strong>email no pertenece a ninguna cuenta</p>
+                payload: "Error al solicitar recuperación de contraseña"
             });
         }
-    }
+    };
 
     return (
         <Container>
@@ -82,7 +78,7 @@ const RequestReset = () => {
                             </Form>
                             {loginData.errorMsg &&
                                 <FailAlert className="login-row">
-                                    {loginData.errorMsg}
+                                    <p><strong>Error:</strong> {loginData.errorMsg}</p>
                                 </FailAlert>
                             }
                             <Card.Text>

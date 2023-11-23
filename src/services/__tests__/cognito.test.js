@@ -1,6 +1,6 @@
 import { describe, expect, it} from "vitest";
 
-import {logInUser, updateUserPassword} from "../cognito.js";
+import {logInUser, requestPasswordReset, updateUserPassword} from "../cognito.js";
 
 describe("logInUser", () => {
 
@@ -98,6 +98,35 @@ describe("updateUserPassword", () => {
             error: true,
             message: errorMsg
         });
+    });
+});
+
+
+describe("requestPasswordReset", () => {
+    it("Returns true if reset request is successful", async () => {
+        const fakeCognitoRequestPasswordReset = async () => {
+            return {
+                CodeDeliveryDetails: {
+                    Destination: "t***@e***",
+                    DeliveryMedium: "EMAIL",
+                    AttributeName: "email"
+                }
+            };
+        };
+        const response = await requestPasswordReset(
+            "triton@example.com", fakeCognitoRequestPasswordReset
+        );
+        expect(response).toBe(true);
+    });
+
+    it("Returns false if reset request is unsuccessful", async () => {
+        const fakeCognitoRequestPasswordReset = async () => {
+            throw new Error("Failed to request password reset");
+        };
+        const response = await requestPasswordReset(
+            "triton@example.com", fakeCognitoRequestPasswordReset
+        );
+        expect(response).toBe(false);
     });
 });
 

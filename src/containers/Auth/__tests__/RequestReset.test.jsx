@@ -1,10 +1,14 @@
-import { describe, expect, it, vi } from "vitest";
+import {describe, expect, it, vi} from "vitest";
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
-import axios from "axios";
+
 import {RequestReset} from "../RequestReset.jsx";
 import {BrowserRouter} from "react-router-dom";
+import { requestPasswordReset } from "../../../services/index.js";
 
-vi.mock("axios");
+vi.mock("../../../services/index.js", () => ({
+    requestPasswordReset: vi.fn()
+}));
+
 
 describe("RequestReset", () => {
     const waitForFormSubmission = async (promise) => {
@@ -16,8 +20,8 @@ describe("RequestReset", () => {
     };
 
     it("Successful reset displays alert", async () => {
-        const promise  = Promise.resolve();
-        axios.post.mockImplementationOnce(() => promise);
+        const promise = Promise.resolve(true);
+        requestPasswordReset.mockImplementationOnce(() => promise);
         window.alert = vi.fn();
 
         render(<BrowserRouter><RequestReset /></BrowserRouter>);
@@ -26,16 +30,13 @@ describe("RequestReset", () => {
     });
 
     it("Unsuccessful reset displays message", async () => {
-        const promise  = Promise.reject();
-        axios.post.mockImplementationOnce(() => promise);
+        const promise = Promise.resolve(false);
+        requestPasswordReset.mockImplementationOnce(() => promise);
         render(<BrowserRouter><RequestReset /></BrowserRouter>);
 
-        try {
-            await waitForFormSubmission(promise);
-        } catch {
-            expect(
-                screen.queryByText(/email no pertenece a ninguna cuenta/)
-            ).toBeInTheDocument();
-        }
+        await waitForFormSubmission(promise);
+        expect(
+            screen.queryByText(/Error al solicitar/)
+        ).toBeInTheDocument();
     });
 });

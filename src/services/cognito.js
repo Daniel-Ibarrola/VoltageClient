@@ -45,7 +45,7 @@ const _cognitoUpdatePassword = async (user, newPassword, session) => {
 
 const _cognitoRequestPasswordReset = async (user) => {
     // Request a password reset for a forgotten password.
-    const client = new CognitoIdentityProviderClient()
+    const client = new CognitoIdentityProviderClient({region: "us-east-2"})
     const input = {
         ClientId: CLIENT_ID,
         Username: user
@@ -126,4 +126,19 @@ export const updateUserPassword = async (
     }
 
     return loginData;
-}
+};
+
+
+export const requestPasswordReset = async (
+    user, requestReset = _cognitoRequestPasswordReset) => {
+
+    try {
+        const response = await requestReset(user);
+        if (response?.CodeDeliveryDetails) {
+            return true;
+        }
+    } catch (error) {
+        console.error("Error requesting password reset: ", error);
+    }
+    return false;
+};

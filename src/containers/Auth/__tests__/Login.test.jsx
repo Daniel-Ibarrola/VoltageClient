@@ -23,8 +23,7 @@ describe("Login", () => {
         });
         fireEvent.click(screen.getAllByRole("button")[0]);
         await waitFor(async () => await promise);
-    }
-
+    };
 
     it("Successful login", async () => {
         const loginResponse = {

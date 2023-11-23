@@ -85,6 +85,8 @@ Response example:
 }
 ```
 
+The user is emailed a confirmation code that he needs to reset his password.
+
 **Note**: This will raise an error if the user has not verified its email.
 
 5. The user resets its password
