@@ -128,7 +128,7 @@ const Login = () => {
                                 {loginData.session &&
                                     <SuccessAlert className="login-row">
                                         <p>Se requiere actualizar la contraseña.</p>
-                                        <Link to="/updatepassword">Click aquí</Link>
+                                        <Link to={`/updatepassword/${loginData.session}`}>Click aquí</Link>
                                     </SuccessAlert>
                                 }
                                 {loginData.errorMsg &&

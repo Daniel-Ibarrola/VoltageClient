@@ -4,6 +4,7 @@ import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import {UpdatePassword} from "../UpdatePassword.jsx";
 import {updateUserPassword} from "../../../services/index.js";
 import {BrowserRouter} from "react-router-dom";
+import {AuthProvider} from "../../../context/AuthProvider.jsx";
 
 vi.mock("../../../services/index.js", () => ({
     updateUserPassword: vi.fn()
@@ -13,8 +14,8 @@ vi.mock("../../../services/index.js", () => ({
 describe("Update Password", () => {
 
     const waitForFormSubmission = async (promise) => {
-        fireEvent.change(screen.getByPlaceholderText("Contraseña"), {
-            target: {value: "6MonkeysRLooking^"}
+        fireEvent.change(screen.getByPlaceholderText("Correo"), {
+            target: {value: "triton@example.com"}
         });
         fireEvent.change(screen.getByPlaceholderText("Nueva Contraseña"), {
             target: {value: "6ElephantsRLooking^"}
@@ -32,14 +33,15 @@ describe("Update Password", () => {
         const promise = Promise.resolve(response);
         updateUserPassword.mockImplementationOnce(() => promise);
 
-        render(<BrowserRouter><UpdatePassword /></BrowserRouter>);
+        render(<BrowserRouter><AuthProvider><UpdatePassword /></AuthProvider></BrowserRouter>);
         await waitForFormSubmission(promise);
 
-        expect(screen.queryByText("Se actualizó la contraseña")).toBeInTheDocument();
+        const token = JSON.parse(localStorage.getItem("token"));
+        expect(token).toBe("FakeToken");
     });
 
 
-    it("Incorrect original password and cannot update", async () => {
+    it("Error updating password", async () => {
         const response = {
             token: "",
             error: true,

@@ -37,11 +37,11 @@ export const validateEmail = (email) => {
     return emailError;
 };
 
-export const formPasswordValidation = (values) => {
+export const formPasswordValidation = (values, passwordKey = "password") => {
     const errors = {}
-    const passwordErrors = validatePassword(values.password);
+    const passwordErrors = validatePassword(values[passwordKey]);
     if (passwordErrors){
-        errors.password = passwordErrors;
+        errors[passwordKey] = passwordErrors;
     }
     return errors;
 };

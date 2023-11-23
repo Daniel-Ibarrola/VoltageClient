@@ -10,7 +10,7 @@ import {
 
 const CLIENT_ID = import.meta.env.VITE_COGNITO_CLIENT_ID;
 
-export const requestLogin = async (user, password) => {
+const _cognitoLogin = async (user, password) => {
     // Make a request to AWS Cognito to authenticate a user
     const client = new CognitoIdentityProviderClient({region: "us-east-2"});
     const input = {
@@ -26,7 +26,54 @@ export const requestLogin = async (user, password) => {
 };
 
 
-export const logInUser = async (user, password, _requestLogin = requestLogin) => {
+const _cognitoUpdatePassword = async (user, newPassword, session) => {
+    // When a new user is created, Cognito requires him to update its password before he can login.
+    const client = new CognitoIdentityProviderClient({region: "us-east-2"});
+    const input = {
+        ChallengeName: "NEW_PASSWORD_REQUIRED",
+        ChallengeResponses: {
+            USERNAME: user,
+            NEW_PASSWORD: newPassword
+        },
+        ClientId: CLIENT_ID,
+        Session: session
+    };
+    const command = new RespondToAuthChallengeCommand(input);
+    return await client.send(command);
+};
+
+
+const _cognitoRequestPasswordReset = async (user) => {
+    // Request a password reset for a forgotten password.
+    const client = new CognitoIdentityProviderClient()
+    const input = {
+        ClientId: CLIENT_ID,
+        Username: user
+    };
+    const command = new ForgotPasswordCommand(input);
+    return await client.send(command);
+};
+
+
+const _cognitoResetPassword = async (user, newPassword, confirmationCode) => {
+    // Reset a user passwords after they requested a password reset.
+    const client = new CognitoIdentityProviderClient()
+    const input = {
+        ClientId: CLIENT_ID,
+        ConfirmationCode: confirmationCode,
+        Password: newPassword,
+        Username: user
+    };
+    const command = new ConfirmForgotPasswordCommand(input);
+    return await client.send(command);
+};
+
+
+export const logInUser = async (user, password, requestLogin = _cognitoLogin) => {
+    // Authenticate a user.
+    // If a user has just been created a password will be assigned to him. Then he will be
+    // requested to update its password.
+    // If he has already updated his password he can log in normally.
     const loginData = {
         token: "",
         error: false,
@@ -35,7 +82,7 @@ export const logInUser = async (user, password, _requestLogin = requestLogin) =>
     }
 
     try {
-        const response = await _requestLogin(user, password);
+        const response = await requestLogin(user, password);
 
         if (response?.AuthenticationResult !== undefined){
             loginData.token = response.AuthenticationResult.IdToken;
@@ -57,43 +104,26 @@ export const logInUser = async (user, password, _requestLogin = requestLogin) =>
     return loginData;
 };
 
-export const setNewPassword = async (user, newPassword, session) => {
-    // Set a new password for a new user.
-    const client = new CognitoIdentityProviderClient()
-    const input = {
-        ChallengeName: "NEW_PASSWORD_REQUIRED",
-        ChallengeResponses: {
-            USERNAME: user,
-            NEW_PASSWORD: newPassword
-        },
-        ClientId: CLIENT_ID,
-        Session: session
-    };
-    const command = new RespondToAuthChallengeCommand(input);
-    return await client.send(command);
-};
+export const updateUserPassword = async (
+    user,
+    newPassword,
+    session,
+    updatePassword = _cognitoUpdatePassword) => {
 
+    const loginData = {
+        token: "",
+        error: false,
+        message: ""
+    }
 
-export const requestPasswordReset = async (user) => {
-    const client = new CognitoIdentityProviderClient()
-    const input = {
-        ClientId: CLIENT_ID,
-        Username: user
-    };
-    const command = new ForgotPasswordCommand(input);
-    return await client.send(command);
-};
+    try {
+        const response = await updatePassword(user, newPassword, session);
+        loginData.token = response.AuthenticationResult.IdToken;
+    } catch (error) {
+        console.error("Error updating password: ", error);
+        loginData.error = true;
+        loginData.message = error.message;
+    }
 
-
-export const updatePassword = async (user, newPassword, confirmationCode) => {
-    const client = new CognitoIdentityProviderClient()
-    const input = {
-        ClientId: CLIENT_ID,
-        ConfirmationCode: confirmationCode,
-        Password: newPassword,
-        Username: user
-    };
-    const command = new ConfirmForgotPasswordCommand(input);
-    return await client.send(command);
-};
-
+    return loginData;
+}
