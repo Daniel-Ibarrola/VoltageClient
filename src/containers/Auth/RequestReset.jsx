@@ -47,9 +47,10 @@ const RequestReset = () => {
             <Row className="justify-content-center">
                 <Col md={{span: 6}}>
                     <Card className="login-card">
-                        <Card.Title className="login-title">Recuperar contraseña</Card.Title>
+                        <Card.Title className="login-title">Recuperación de contraseña</Card.Title>
                         <hr />
                         <Card.Body className="login-body">
+                            <Card.Text>Solicitar recuperación de contraseña.</Card.Text>
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group>
                                     <Form.Label
@@ -81,6 +82,9 @@ const RequestReset = () => {
                                     <p><strong>Error:</strong> {loginData.errorMsg}</p>
                                 </FailAlert>
                             }
+                            <Card.Text>
+                                <Link to="/reset">Resetear contraseña</Link>
+                            </Card.Text>
                             <Card.Text>
                                 <Link to="/">Volver al inicio</Link>
                             </Card.Text>

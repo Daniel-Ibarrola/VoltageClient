@@ -1,51 +1,48 @@
-import axios from "axios";
-import {useParams} from "react-router-dom";
-import {describe, expect, it, vi} from "vitest";
-import {fireEvent, render, screen, waitFor} from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 
 import { ResetPassword } from "../ResetPassword.jsx";
+import { resetUserPassword } from "../../../services/index.js";
 
 
-vi.mock("axios");
-vi.mock("react-router-dom");
+vi.mock("../../../services/index.js", () => ({
+    resetUserPassword: vi.fn()
+}));
 
 
 describe("ResetPassword", () => {
     const waitForFormSubmission = async (promise) => {
+        fireEvent.change(screen.getByPlaceholderText("Correo"), {
+            target: {value: "triton@example.com"}
+        });
         fireEvent.change(screen.getByPlaceholderText("Contraseña"), {
             target: {value: "6MonkeysRLooking^"}
+        });
+        fireEvent.change(screen.getByPlaceholderText("Código de confirmación"), {
+            target: {value: "12345"}
         });
         fireEvent.click(screen.getByRole("button"));
         await waitFor(async () => await promise);
     };
 
-    const getMocks = (promise) => {
-        axios.post.mockImplementationOnce(() => promise);
-        useParams.mockImplementation(() => ({
-           code: "testCode",
-        }));
-    };
-
     it("Successful reset displays alert", async () => {
-        const promise  = Promise.resolve();
-        getMocks(promise);
+        const promise  = Promise.resolve(true);
+        resetUserPassword.mockImplementationOnce(() => promise);
 
-        render(<ResetPassword />);
+        render(<BrowserRouter><ResetPassword /></BrowserRouter>);
         await waitForFormSubmission(promise);
+
         expect(screen.queryByText(/reseteado la contraseña/)).toBeInTheDocument();
     });
 
     it("Unsuccessful reset displays message", async () => {
-        const promise  = Promise.reject();
-        getMocks(promise);
-        render(<ResetPassword />);
+        const promise  = Promise.resolve(false);
+        resetUserPassword.mockImplementationOnce(() => promise);
 
-        try {
-            await waitForFormSubmission(promise);
-        } catch {
-            expect(
-                screen.queryByText(/link invalido o expirado/)
-            ).toBeInTheDocument();
-        }
+        render(<BrowserRouter><ResetPassword /></BrowserRouter>);
+        await waitForFormSubmission(promise);
+
+        expect(screen.queryByText(/Error al resetear/)).toBeInTheDocument();
     });
-})
+});

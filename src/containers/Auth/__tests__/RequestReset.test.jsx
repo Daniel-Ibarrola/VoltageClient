@@ -19,7 +19,7 @@ describe("RequestReset", () => {
         await waitFor(async () => await promise);
     };
 
-    it("Successful reset displays alert", async () => {
+    it("Successful reset displays alert and link to reset route", async () => {
         const promise = Promise.resolve(true);
         requestPasswordReset.mockImplementationOnce(() => promise);
         window.alert = vi.fn();

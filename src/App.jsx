@@ -69,7 +69,7 @@ const App = () => {
                 <Route path="logout" element={<Logout />} />
                 <Route path="updatepassword/:session" element={<UpdatePassword />} />
                 <Route path="resetpassword" element={<RequestReset />} />
-                <Route path="reset/:code" element={<ResetPassword />} />
+                <Route path="reset" element={<ResetPassword />} />
                 <Route path="*" element={<NoMatch />} />
             </Routes>
         </>
