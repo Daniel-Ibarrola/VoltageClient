@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import {
-    ChangePass,
     Home,
     Login,
     Logout,
@@ -56,14 +55,6 @@ const App = () => {
                         <Station fetchTime={fetchTime} />
                     </Protected>
                 }
-                />
-                <Route
-                    path="change"
-                    element={
-                        <Protected>
-                            <ChangePass />
-                        </Protected>
-                    }
                 />
                 <Route path="login" element={<Login />} />
                 <Route path="logout" element={<Logout />} />

@@ -1,4 +1,3 @@
-export * from "./Auth/ChangePass.jsx";
 export * from "./Auth/Login.jsx";
 export * from "./Auth/Logout.jsx";
 export * from "./Auth/RequestReset.jsx";

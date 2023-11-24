@@ -22,12 +22,6 @@ export const UserDropDown = () => {
                         as="p"
                         className="nav-dropdown-item"
                     >
-                        <Link to={"/change"}>Cambiar contraseña</Link>
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                        as="p"
-                        className="nav-dropdown-item"
-                    >
                         <Link to={"/logout"}>Cerrar sesión</Link>
                     </NavDropdown.Item>
                 </NavDropdown>
