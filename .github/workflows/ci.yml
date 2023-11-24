@@ -70,4 +70,4 @@ jobs:
             -p 5173:5173 \
             ${{ env.IMAGE }}:latest
       - name: Unit and integration tests
-        run: docker exec voltage-client npm run test
+        run: docker exec voltage-client npm run test-ci
