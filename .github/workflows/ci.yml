@@ -7,13 +7,16 @@ on:
     branches: [ "main" ]
 
 env:
-  IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]')/summarizer
+  IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]')/voltage-client
 
 jobs:
 
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
