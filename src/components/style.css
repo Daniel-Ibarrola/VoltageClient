@@ -1,0 +1,30 @@
+.navbar {
+    color: white;
+}
+
+.navbar > a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar > a:hover {
+    color: white;
+}
+
+.nav-dropdown > a {
+    color: snow!important;
+    text-decoration: none;
+}
+
+.nav-dropdown-item {
+    margin-bottom: 0;
+}
+
+.nav-dropdown-item > a {
+    color: white;
+    text-decoration: none;
+}
+
+.toast-alert {
+    margin-bottom: 15px;
+}

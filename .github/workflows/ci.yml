@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Integration
 
 on:
   push:
@@ -6,24 +6,66 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
+env:
+  IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]')/voltage-client
 
 jobs:
-  ci:
 
+  build:
+    name: Build Docker Image
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node 18
-        uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
-          node-version: "18.16"
-          cache: 'npm'
+          ref: main
+      - name: Log in to GitHub Packages
+        run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull image
+        run: |
+          docker pull ${{ env.IMAGE }}:latest || true
+      - name: Build image
+        run: |
+          docker build . \
+            --tag ${{ env.IMAGE }}:latest \
+            --file ./Dockerfile
+      - name: Push image
+        run: |
+          docker push ${{ env.IMAGE }}:latest
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Test with vitest
-        run: npm run test-ci
+  test:
+    name: Test Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Log in to GitHub Packages
+        run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull image
+        run: |
+          docker pull ${{ env.IMAGE }}:latest || true
+      - name: Build image
+        run: |
+          docker build . \
+            --tag ${{ env.IMAGE }}:latest \
+            --file ./Dockerfile \
+      - name: Run container
+        run: |
+          docker run \
+            -d \
+            --name voltage-client \
+            -e AWS_REGION=us-east-2 \
+            -p 5173:5173 \
+            ${{ env.IMAGE }}:latest
+      - name: Unit and integration tests
+        run: docker exec voltage-client npm run test-ci
