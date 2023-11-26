@@ -1,35 +1,39 @@
-import axios from "axios";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi} from "vitest";
 import { Home } from "../Home.jsx";
+import { getLastReports } from "../../../services/index.js";
 
-vi.mock("axios");
-
-const stationOne = {
-    name: "Caracol",
-    date:  "2023-03-31T00:00:00",
-    battery: 300.12,
-    panel: 100.50,
-};
-
-const stationTwo = {
-    name: "Tonalapa",
-    date:  "2023-03-31T00:00:00",
-    battery: 150.24,
-    panel: 200.15,
-};
-
-
-const stations = [stationOne, stationTwo]
+vi.mock("../../../services/index.js", () => ({
+    getLastReports: vi.fn()
+}));
 
 
 describe("Home", () => {
+
+    const stationOne = {
+        name: "Caracol",
+        date:  "2023-03-31T00:00:00",
+        battery: 300.12,
+        panel: 100.50,
+    };
+
+    const stationTwo = {
+        name: "Tonalapa",
+        date:  "2023-03-31T00:00:00",
+        battery: 150.24,
+        panel: 200.15,
+    };
+
+
+    const stations = [stationOne, stationTwo]
+
     it("succeeds fetching data", async () => {
         const promise = Promise.resolve({
             data: stations,
+            error: "",
         });
-        axios.get.mockImplementationOnce(() => promise);
+        getLastReports.mockImplementationOnce(() => promise);
 
         render(<BrowserRouter><Home fetchTime={3600 * 1000}/></BrowserRouter>);
 
@@ -43,25 +47,26 @@ describe("Home", () => {
     });
 
     it("fails fetching data", async () => {
-        const promise = Promise.reject();
-        axios.get.mockImplementationOnce(() => promise);
+        const promise = Promise.resolve({
+            data: [],
+            error: "No se pudo cargar los últimos datos"
+        });
+        getLastReports.mockImplementationOnce(() => promise);
 
         render(<BrowserRouter><Home fetchTime={3600 * 1000}/></BrowserRouter>);
         expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
 
-        try {
-            await waitFor(async () => await promise);
-        } catch (error) {
-            expect(screen.queryByText(/Cargando/)).toBeNull();
-            expect(screen.queryByText(/No se pudo cargar/)).toBeInTheDocument();
-        }
+        await waitFor(async () => await promise);
+        expect(screen.queryByText(/Cargando/)).toBeNull();
+        expect(screen.queryByText(/No se pudo cargar/)).toBeInTheDocument();
     });
 
     it("searches for a specific station", async () => {
         const promise = Promise.resolve({
             data: stations,
+            error: ""
         });
-        axios.get.mockImplementationOnce(() => promise);
+        getLastReports.mockImplementationOnce(() => promise);
 
         render(<BrowserRouter><Home fetchTime={3600 * 1000}/></BrowserRouter>);
 
@@ -80,6 +85,7 @@ describe("Home", () => {
     it("Fetches data again after time passes", async () => {
         const initialPromise = Promise.resolve({
             data: stations,
+            error: ""
         });
         const finalPromise = Promise.resolve({
             data: [
@@ -95,9 +101,10 @@ describe("Home", () => {
                         battery: 400.0,
                         panel: 600.0,
                     },
-            ]
+            ],
+            error: ""
         });
-        axios.get
+        getLastReports
             .mockImplementationOnce(() => initialPromise)
             .mockImplementationOnce(() => finalPromise);
 

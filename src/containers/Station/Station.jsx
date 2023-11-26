@@ -7,7 +7,6 @@ import Row from "react-bootstrap/Row";
 
 import AuthContext from "../../context/AuthProvider.jsx";
 import { STATION_NAMES } from "../../data/index.js";
-import { reportsUrl } from "../../services/index.js";
 import { FailAlert, LoadSpinner } from "../../components/index.js";
 import { STATION_ACTION, stationDataReducer } from "../../reducers/index.js";
 import { VoltageChart } from "./VoltageChart.jsx";
@@ -58,25 +57,25 @@ const Station = () => {
     }
 
     const fetchStationData = async () => {
-        dispatchStationData({type: STATION_ACTION.initFetch});
-        const requestData = [
-            {
-                action: STATION_ACTION.successFetchStations,
-                url: reportsUrl + stationName + urlParams.voltages
-            },
-            {action:
-                STATION_ACTION.successFetchReportCount,
-                url: reportsUrl + stationName + "/counts/" +  urlParams.reports
-            },
-        ]
-        for (let ii = 0; ii < requestData.length; ii++){
-            try {
-                await getRequest(requestData[ii].url, requestData[ii].action);
-            } catch {
-                dispatchStationData({type: STATION_ACTION.failFetch});
-                break;
-            }
-        }
+        // dispatchStationData({type: STATION_ACTION.initFetch});
+        // const requestData = [
+        //     {
+        //         action: STATION_ACTION.successFetchStations,
+        //         url: reportsUrl + stationName + urlParams.voltages
+        //     },
+        //     {action:
+        //         STATION_ACTION.successFetchReportCount,
+        //         url: reportsUrl + stationName + "/counts/" +  urlParams.reports
+        //     },
+        // ]
+        // for (let ii = 0; ii < requestData.length; ii++){
+        //     try {
+        //         await getRequest(requestData[ii].url, requestData[ii].action);
+        //     } catch {
+        //         dispatchStationData({type: STATION_ACTION.failFetch});
+        //         break;
+        //     }
+        // }
     }
 
     useEffect(() => {

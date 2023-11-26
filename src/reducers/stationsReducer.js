@@ -1,40 +1,39 @@
 
 export const STATIONS_ACTIONS = {
-    initFetch: 0,
-    successFetch: 1,
-    failFetch: 2,
-    search: 3,
+    INIT_FETCH: 0,
+    SUCCESS_FETCH: 1,
+    FAIL_FETCH: 2,
+    SEARCH: 3,
 }
 
 
 export const stationsReducer = (state, action) => {
     switch (action.type) {
-        case STATIONS_ACTIONS.initFetch:
+        case STATIONS_ACTIONS.INIT_FETCH:
             return {
                 ...state,
                 isLoading: true,
-                isError: false,
+                error: "",
             };
-        case STATIONS_ACTIONS.successFetch:
-            // action.payload.sort((a, b) => a.name > b.name);
+        case STATIONS_ACTIONS.SUCCESS_FETCH:
             return  {
                 ...state,
                 isLoading: false,
-                isError: false,
+                error: "",
                 data: action.payload,
                 display: action.payload.filter(
                     st => st.name.toLowerCase().includes(
                         state.searchTerm.replace(/\s/g, "").toLowerCase()
                     )
                 )
-            }
-        case STATIONS_ACTIONS.failFetch:
+            };
+        case STATIONS_ACTIONS.FAIL_FETCH:
             return {
                 ...state,
                 isLoading: false,
-                isError: true,
+                error: action.payload,
             }
-        case STATIONS_ACTIONS.search: {
+        case STATIONS_ACTIONS.SEARCH: {
             return {
                 ...state,
                 searchTerm: action.payload,
@@ -43,7 +42,7 @@ export const stationsReducer = (state, action) => {
                         action.payload.replace(/\s/g, "").toLowerCase()
                     )
                 )
-            }
+            };
         }
         default:
             throw new Error(`Unknown action type ${action.type}`);

@@ -32,7 +32,7 @@ const reports = [
 
 describe("stationDataReducer", () => {
     it("initiating fetch sets loading state", () => {
-        const action = { type: STATION_ACTION.initFetch };
+        const action = { type: STATION_ACTION.INIT_FETCH };
         const state = {
             voltages: [],
             reports: [],
@@ -54,7 +54,7 @@ describe("stationDataReducer", () => {
 
     it("updates voltage data on successful fetching", () => {
         const action = {
-            type: STATION_ACTION.successFetchStations,
+            type: STATION_ACTION.SUCCESS_FETCH_VOLTAGES,
             payload: voltages
         };
         const state = {
@@ -78,7 +78,7 @@ describe("stationDataReducer", () => {
 
     it("updates report count data on successful fetching", () => {
         const action = {
-            type: STATION_ACTION.successFetchReportCount,
+            type: STATION_ACTION.SUCCESS_FETCH_COUNT,
             payload: reports
         };
         const state = {
@@ -101,7 +101,7 @@ describe("stationDataReducer", () => {
     });
 
     it("sets error state on fetch fail", () => {
-        const action = { type: STATION_ACTION.failFetch };
+        const action = { type: STATION_ACTION.FAIL_FETCH };
         const state = {
             voltages: [],
             reports: [],

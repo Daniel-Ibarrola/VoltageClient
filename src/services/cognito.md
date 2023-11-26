@@ -3,7 +3,8 @@
 1. A new user is created and tries to authenticate. However, he will not receive a token because he must uptade
 his password.
 ```shell
-aws cognito-idp initiate-auth --client-id <ClientID>  \
+aws cognito-idp initiate-auth \
+  --client-id <ClientID>  \
   --auth-flow USER_PASSWORD_AUTH  \
   --auth-parameters "USERNAME=<User>,PASSWORD=<Password>"
 ```
