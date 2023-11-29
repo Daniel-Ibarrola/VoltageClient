@@ -30,10 +30,11 @@ const getApiUrl = () => {
 export const getLastReports = async (token) => {
     const url = getApiUrl() + "/last_reports";
     try {
-        const response = await axios.get(
-            url,
-            {headers: {Authorization: {token}}}
-        );
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: token
+            }
+        });
         return {
             data: response.data,
             error: ""
