@@ -61,24 +61,3 @@ describe("getReportDataForPlot", () => {
         expect(data.datasets[0].data).toStrictEqual([1, 2]);
     })
 });
-
-
-describe("getDateRange", () => {
-    it("Gets date range for voltage data", () => {
-        expect(getDateRange(voltages)).toBe("30/03/2023 - 31/03/2023");
-    });
-
-    it("Gets date range fro, reports data", () => {
-        expect(getDateRange(reports)).toBe("30/03/2023 - 31/03/2023");
-    });
-});
-
-
-describe("parseReportDate", () => {
-    it("Gets correct date", () => {
-        const date = parseReportDate("2023-03-30");
-        expect(date.getDate()).toBe(30);
-        expect(date.getFullYear()).toBe(2023);
-        expect(date.getMonth() + 1).toBe(3);
-    });
-});

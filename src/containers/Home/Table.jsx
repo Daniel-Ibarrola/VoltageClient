@@ -1,6 +1,6 @@
 import RBTable from "react-bootstrap/Table"
 
-import { lastReportTime, roundVoltage} from "../../utils/parseDate.js";
+import { lastReportTime, roundVoltage} from "../../utils/numeric.js";
 import { Link } from "react-router-dom";
 import { STATION_NAMES } from "../../data/index.js";
 

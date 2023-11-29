@@ -62,7 +62,6 @@ const Home = ({ fetchTime }) => {
     };
 
     return (
-        <>
             <Container>
                 <Row>
                     <Col>
@@ -90,8 +89,6 @@ const Home = ({ fetchTime }) => {
                     </Col>
                 </Row>
             </Container>
-        </>
-
     );
 }
 

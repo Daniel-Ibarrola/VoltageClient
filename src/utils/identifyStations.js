@@ -15,7 +15,8 @@ export const identifyStations = (reports) => {
             stations.push({
                 name: reports[ii].name,
                 date: new Date(Date.now()).toLocaleDateString("es-MX", dateOptions),
-                body: `${reports[ii].name} no se ha reportado desde ${date.toLocaleDateString("es-MX", dateOptions)}`
+                body: `${reports[ii].name} no se ha reportado desde 
+                ${date.toLocaleDateString("es-MX", dateOptions)}`
             });
         }
         else if (reports[ii].battery < 10 || reports[ii].panel < 10){
