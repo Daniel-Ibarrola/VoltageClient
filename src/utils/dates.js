@@ -77,3 +77,17 @@ export const getLastDate = (data) => {
     });
     return dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
 };
+
+
+export const getNumberOfDays = (period) => {
+    switch (period){
+        case "week":
+            return 7;
+        case "month":
+            return 30;
+        case "year":
+            return 365;
+        default:
+            throw new Error(`Invalid period ${period}`);
+    }
+};

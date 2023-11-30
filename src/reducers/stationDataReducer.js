@@ -1,7 +1,7 @@
 
 export const STATION_ACTION = {
     INIT_FETCH: 0,
-    SUCCESS_FETCH_VOLTAGES: 1,
+    SUCCESS_FETCH_REPORTS: 1,
     SUCCESS_FETCH_COUNT: 2,
     FAIL_FETCH: 3,
 };
@@ -21,7 +21,7 @@ export const stationDataReducer = (state, action) => {
                 isError: false,
                 reports: action.payload,
             }
-        case STATION_ACTION.SUCCESS_FETCH_VOLTAGES:
+        case STATION_ACTION.SUCCESS_FETCH_REPORTS:
             return {
                 ...state,
                 isLoading: false,

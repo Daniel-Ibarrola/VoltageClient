@@ -1,28 +1,19 @@
 import { useContext, useReducer, useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 import AuthContext from "../../context/AuthProvider.jsx";
-import { STATION_NAMES } from "../../data/index.js";
 import { FailAlert, LoadSpinner } from "../../components/index.js";
 import { STATION_ACTION, stationDataReducer } from "../../reducers/index.js";
 import { VoltageChart } from "./VoltageChart.jsx";
 import { ReportsChart } from "./ReportsChart.jsx";
 import { Statistics } from "./Statistics.jsx";
-import { getDateWithDelta } from "../../utils/index.js";
+import { getDateWithDelta, getNumberOfDays } from "../../utils/index.js";
+import { getStationReports, getStationReportCounts} from "../../services/index.js";
 import "./style.css"
 
-
-
-const getPrettyName = (stationName) => {
-    if (Object.hasOwn(STATION_NAMES, stationName)){
-        return STATION_NAMES[stationName];
-    }
-    return "";
-}
 
 const Station = () => {
     const { stationName } = useParams();
@@ -33,79 +24,67 @@ const Station = () => {
             reports: [],
             isLoading: false,
             isError: false,
-            name: getPrettyName(stationName),
+            station: stationName,
         }
     );
     const { token } = useContext(AuthContext);
 
-    let initialDate = getDateWithDelta(new Date(Date.now()), 7);
-    const [urlParams, setUrlParams] = useState({
-        // TODO: pass parameters to axios.get
-        voltages: `?startdate=${initialDate}`,
-        reports: `?startdate=${initialDate}`,
-    });
+    const [reportsDate, setReportsDate] = useState(
+        getDateWithDelta(new Date(Date.now()), 7)
+    );
+    const [countsDate, setCountsDate] = useState(
+        getDateWithDelta(new Date(Date.now()), 7)
+    );
 
-    const getRequest = async (url, action) => {
-        const result = await axios.get(
-            url,
-            {headers: {Authorization: `Bearer ${token}`}}
-        );
-        dispatchStationData({
-            type: action,
-            payload: result.data,
-        });
-    }
 
-    const fetchStationData = async () => {
-        // dispatchStationData({type: STATION_ACTION.initFetch});
-        // const requestData = [
-        //     {
-        //         action: STATION_ACTION.successFetchStations,
-        //         url: reportsUrl + stationName + urlParams.voltages
-        //     },
-        //     {action:
-        //         STATION_ACTION.successFetchReportCount,
-        //         url: reportsUrl + stationName + "/counts/" +  urlParams.reports
-        //     },
-        // ]
-        // for (let ii = 0; ii < requestData.length; ii++){
-        //     try {
-        //         await getRequest(requestData[ii].url, requestData[ii].action);
-        //     } catch {
-        //         dispatchStationData({type: STATION_ACTION.failFetch});
-        //         break;
-        //     }
-        // }
+    const fetchStationReports = async () => {
+        dispatchStationData({type: STATION_ACTION.INIT_FETCH})
+        const reports = await getStationReports(reportsDate, token);
+        if (reports.data.length > 0) {
+            dispatchStationData({
+                type: STATION_ACTION.SUCCESS_FETCH_REPORTS,
+                payload: reports.data
+            });
+        } else {
+            dispatchStationData({
+                type: STATION_ACTION.FAIL_FETCH,
+                payload: reports.error
+            });
+        }
+    };
+
+    const fetchReportCounts = async () => {
+        const reports = await getStationReportCounts(countsDate, token);
+        if (reports.data.length > 0) {
+            dispatchStationData({
+                type: STATION_ACTION.SUCCESS_FETCH_COUNT,
+                payload: reports.data
+            });
+        } else {
+            dispatchStationData({
+                type: STATION_ACTION.FAIL_FETCH,
+                payload: reports.error
+            });
+        }
     }
 
     useEffect(() => {
-        if (stationData.name){
-            fetchStationData();
-        }
-    }, [urlParams]);
+        fetchStationReports();
+    }, [reportsDate]);
+
+    useEffect(() => {
+        fetchReportCounts();
+    }, [countsDate]);
+
 
     const handleDateChange = (period, type) => {
+        const days = getNumberOfDays(period);
         const date = new Date(Date.now());
-        let days = null;
-        switch (period){
-            case "week":
-                days = 7;
-                break;
-            case "month":
-                days = 30;
-                break;
-            case "year":
-                days= 365;
-                break;
-            default:
-                break;
-        }
-        if (days !== null){
-            const startDate = getDateWithDelta(date, days);
-            setUrlParams({
-                ...urlParams,
-                [type]: `?startdate=${startDate}`,
-            });
+        const startDate = getDateWithDelta(date, days);
+        if (type === "voltages"){
+            setReportsDate(startDate);
+        } else if (type === "reports"){
+            setCountsDate(startDate);
         }
     };
 
