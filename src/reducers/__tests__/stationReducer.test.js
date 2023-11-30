@@ -2,14 +2,14 @@ import {describe, expect, it} from "vitest";
 import {STATIONS_ACTIONS, stationsReducer} from "../stationsReducer.js";
 
 const stationOne = {
-    name: "Caracol",
+    station: "Caracol",
     date:  "2023-03-31T00:00:00",
     battery: 300.12,
     panel: 100.50,
 };
 
 const stationTwo = {
-    name: "Tonalapa",
+    station: "Tonalapa",
     date:  "2023-03-31T00:00:00",
     battery: 150.24,
     panel: 200.15,

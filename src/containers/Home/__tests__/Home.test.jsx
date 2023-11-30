@@ -12,14 +12,14 @@ vi.mock("../../../services/index.js", () => ({
 describe("Home", () => {
 
     const stationOne = {
-        name: "Caracol",
+        station: "Caracol",
         date:  "2023-03-31T00:00:00",
         battery: 300.12,
         panel: 100.50,
     };
 
     const stationTwo = {
-        name: "Tonalapa",
+        station: "Tonalapa",
         date:  "2023-03-31T00:00:00",
         battery: 150.24,
         panel: 200.15,
@@ -90,13 +90,13 @@ describe("Home", () => {
         const finalPromise = Promise.resolve({
             data: [
                     {
-                        name: "Caracol",
+                        station: "Caracol",
                         date:  "2023-03-31T00:00:00",
                         battery: 500.0,
                         panel: 400.0,
                     },
                     {
-                        name: "Tonalapa",
+                        station: "Tonalapa",
                         date:  "2023-03-31T00:00:00",
                         battery: 400.0,
                         panel: 600.0,

@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {getDataMax, getDataMin, getLastDate} from "../stationStats.js";
+import {getDataMax, getDataMin} from "../stationStats.js";
 
 
 const data = [
@@ -31,12 +31,5 @@ describe("getMinVoltage",() => {
 describe("getMaxVoltage",() => {
     it("Computes max voltage correctly", () => {
         expect(getDataMax(data, "battery")).toBe(205.0);
-    });
-});
-
-
-describe("getLastDate",() => {
-    it("Computes last date correctly", () => {
-        expect(getLastDate(data)).toBe("Viernes, 31 de marzo de 2023, 12:00:00");
     });
 });

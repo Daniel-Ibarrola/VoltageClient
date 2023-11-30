@@ -36,7 +36,7 @@ export const getLastReports = async (token) => {
             }
         });
         return {
-            data: response.data,
+            data: response.data.reports,
             error: ""
         };
     } catch (error) {

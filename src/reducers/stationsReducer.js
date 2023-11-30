@@ -22,8 +22,9 @@ export const stationsReducer = (state, action) => {
                 error: "",
                 data: action.payload,
                 display: action.payload.filter(
-                    st => st.name.toLowerCase().includes(
-                        state.searchTerm.replace(/\s/g, "").toLowerCase()
+                    st => st.station.toLowerCase().includes(
+                        state.searchTerm.replace(/\s/g, "")
+                            .toLowerCase()
                     )
                 )
             };
@@ -38,7 +39,7 @@ export const stationsReducer = (state, action) => {
                 ...state,
                 searchTerm: action.payload,
                 display: state.data.filter(
-                    st => st.name.toLowerCase().includes(
+                    st => st.station.toLowerCase().includes(
                         action.payload.replace(/\s/g, "").toLowerCase()
                     )
                 )

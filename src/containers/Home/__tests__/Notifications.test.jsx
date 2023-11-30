@@ -6,7 +6,7 @@ import { Notifications } from "../Notifications.jsx";
 describe("Notifications", () => {
    it ("Renders toast if station last report is past tolerance date", () => {
        const lastReports = [{
-           name: "Caracol",
+           station: "Caracol",
            date:  "2023-03-31T00:00:00",
            battery: 300.12,
            panel: 100.50,
@@ -18,7 +18,7 @@ describe("Notifications", () => {
 
    it("Renders toast if voltage is below threshold", () => {
       const lastReports = [{
-          name: "Caracol",
+          station: "Caracol",
           date: new Date(Date.now()).toDateString(),
           battery: 5,
           panel: 100,
@@ -30,7 +30,7 @@ describe("Notifications", () => {
 
    it("Doesn't render toast if everything is alright", () => {
        const lastReports = [{
-           name: "Caracol",
+           station: "Caracol",
            date: new Date(Date.now()).toDateString(),
            battery: 100,
            panel: 100,
@@ -42,13 +42,13 @@ describe("Notifications", () => {
     it("Can render multiple toasts", () => {
         const lastReports = [
             {
-                name: "Caracol",
+                station: "Caracol",
                 date: new Date(Date.now()).toDateString(),
                 battery: 5,
                 panel: 100,
             },
             {
-                name: "Tonalapa",
+                station: "Tonalapa",
                 date:  "2023-03-31T00:00:00",
                 battery: 300.12,
                 panel: 100.50,

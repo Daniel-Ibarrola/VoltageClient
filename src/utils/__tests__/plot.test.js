@@ -1,6 +1,5 @@
 import {describe, expect, it} from "vitest";
 import {getReportDataForPlot, getVoltageDataForPlot} from "../plot.js";
-import {getDateRange, parseReportDate} from "../plot.js";
 
 
 const voltages = [

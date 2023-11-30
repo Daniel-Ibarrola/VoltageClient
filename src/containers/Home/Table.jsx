@@ -1,9 +1,7 @@
 import RBTable from "react-bootstrap/Table"
 
-import { lastReportTime, roundVoltage} from "../../utils/numeric.js";
+import { lastReportTime, roundVoltage} from "../../utils/index.js";
 import { Link } from "react-router-dom";
-import { STATION_NAMES } from "../../data/index.js";
-
 
 const Table = ({ data }) => {
     return (
@@ -18,9 +16,11 @@ const Table = ({ data }) => {
                 </thead>
                 <tbody>
                 {data.map(st => (
-                    <tr key={st.name}>
+                    <tr key={st.station}>
                         <td>
-                            <Link to={`/stations/${st.name}`}>{STATION_NAMES[st.name]}</Link>
+                            <Link to={`/stations/${st.station}`}>
+                                {st.station}
+                            </Link>
                         </td>
                         <td>{lastReportTime(st.date)}</td>
                         <td>{roundVoltage(st.battery)}</td>

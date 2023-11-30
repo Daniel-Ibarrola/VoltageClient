@@ -5,6 +5,7 @@ import {getReportDataForPlot, getDateRange} from "../../utils/index.js";
 import { Dropdown } from "./Dropdown.jsx";
 import "./style.css"
 
+
 const ReportsChart = ({ reports, onDropDownItemClick }) => {
     const options = {
         scales: {
