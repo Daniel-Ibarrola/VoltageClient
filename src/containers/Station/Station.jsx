@@ -16,6 +16,7 @@ import "./style.css"
 
 
 const Station = () => {
+    // TODO: station names with spaces/accents get a 404
     const { stationName } = useParams();
     const [stationData, dispatchStationData] = useReducer(
         stationDataReducer,
@@ -39,7 +40,7 @@ const Station = () => {
 
     const fetchStationReports = async () => {
         dispatchStationData({type: STATION_ACTION.INIT_FETCH})
-        const reports = await getStationReports(reportsDate, token);
+        const reports = await getStationReports(stationName, reportsDate, token);
         if (reports.data.length > 0) {
             dispatchStationData({
                 type: STATION_ACTION.SUCCESS_FETCH_REPORTS,
@@ -54,7 +55,7 @@ const Station = () => {
     };
 
     const fetchReportCounts = async () => {
-        const reports = await getStationReportCounts(countsDate, token);
+        const reports = await getStationReportCounts(stationName, countsDate, token);
         if (reports.data.length > 0) {
             dispatchStationData({
                 type: STATION_ACTION.SUCCESS_FETCH_COUNT,

@@ -51,12 +51,30 @@ export const getLastReports = async (token) => {
 
 /**
  * Get the reports of a station
+ * @param {string} stationName - The name of the station
  * @param {string} startDate - The date from which to get the reports
  * @param {string} token - The authentication token from Cognito
  * @returns {Promise<ReportsData>}
  */
-export const getStationReports = async (startDate, token) => {
-
+export const getStationReports = async (stationName, startDate, token) => {
+    const url = `${getApiUrl()}/reports/${stationName}`;
+    try {
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: token
+            }
+        });
+        return {
+            data: response.data.reports,
+            error: ""
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            data: [],
+            error: error.message
+        };
+    }
 };
 
 
@@ -76,10 +94,28 @@ export const getStationReports = async (startDate, token) => {
 
 /**
  * Get the report counts of a station
+ * @param {string} stationName - The name of the station
  * @param {string} startDate - The date from which to get the reports
  * @param {string} token - The authentication token from Cognito
  * @returns {Promise<ReportsData>}
  */
-export const getStationReportCounts = async (startDate, token) => {
-
+export const getStationReportCounts = async (stationName, startDate, token) => {
+    const url = `${getApiUrl()}/reports/${stationName}/count`;
+    try {
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: token
+            }
+        });
+        return {
+            data: response.data.reports,
+            error: ""
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            data: [],
+            error: error.message
+        };
+    }
 };

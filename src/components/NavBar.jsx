@@ -41,6 +41,7 @@ export const NavBar = () => {
             <Container>
                 <RBNavbar.Brand className="navbar">
                     <Link to={"/stations"}>
+                        {/* TODO: logo dissapears when reloading page */}
                         <img
                             alt=""
                             src="cires.png"

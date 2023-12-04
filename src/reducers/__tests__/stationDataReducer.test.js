@@ -25,11 +25,11 @@ describe("stationDataReducer", () => {
     const reportsCounts = [
         {
             date: "2023-03-30",
-            reports: 1,
+            count: 1,
         },
         {
             date: "2023-03-31",
-            reports: 2,
+            count: 2,
         },
     ];
 
@@ -69,7 +69,7 @@ describe("stationDataReducer", () => {
 
         const newState = stationDataReducer(state, action);
         const expectedState = {
-            voltages: reports,  // Home should be sorted
+            voltages: reports,  // should be sorted
             reports: [],
             isLoading: false,
             isError: false,

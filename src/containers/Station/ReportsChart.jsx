@@ -28,7 +28,6 @@ const ReportsChart = ({ reports, onDropDownItemClick }) => {
         }
     };
     const data = getReportDataForPlot(reports);
-
     return(
         <>
             <Card className="chart-card">

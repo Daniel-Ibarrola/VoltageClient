@@ -39,7 +39,7 @@ export const getReportDataForPlot = (reports) => {
             {
                 fill: true,
                 label: "Número de reportes",
-                data: reports.map((item) => (item.reports)),
+                data: reports.map((item) => (item.count)),
                 borderColor: 'rgb(40, 180, 99)',
                 backgroundColor: 'rgba(40, 180, 99, 0.2)',
                 stepped: "after",

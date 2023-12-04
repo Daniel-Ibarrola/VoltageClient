@@ -23,11 +23,11 @@ const voltages = [
 const reports = [
     {
         date: "2023-03-30",
-        reports: 1,
+        count: 1,
     },
     {
         date: "2023-03-31",
-        reports: 2,
+        count: 2,
     },
 ]
 
