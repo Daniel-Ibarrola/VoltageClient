@@ -16,7 +16,6 @@ import "./style.css"
 
 
 const Station = () => {
-    // TODO: station names with spaces/accents get a 404
     const { stationName } = useParams();
     const [stationData, dispatchStationData] = useReducer(
         stationDataReducer,
