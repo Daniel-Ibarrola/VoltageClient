@@ -1,0 +1,61 @@
+name: Continuous delivery
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy-to-dev:
+    name: Upload to Amazon S3
+    runs-on: ubuntu-latest
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Log in to GitHub Packages
+        run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull image
+        run: |
+          docker pull ${{ env.IMAGE }}:latest || true
+
+      - name: Build image
+        run: |
+          docker build . \
+            --tag ${{ env.IMAGE }}:latest \
+            --file ./Dockerfile \
+
+      - name: Run container
+        run: |
+          docker run \
+            -d \
+            --name voltage-client \
+            -e AWS_REGION=us-east-2 \
+            -p 5173:5173 \
+            -v ./dist:/app/dist \
+            ${{ env.IMAGE }}:latest
+
+      - name: Build React App
+        run: docker compose exec voltage-client npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+            role-to-assume: arn:aws:iam::111111111111:role/my-github-actions-role-test
+            aws-region: us-east-1
+
+      - name: Upload files to dev website
+        run: |
+          aws s3 sync . s3://my-s3-test-website-bucket
+
+      - name: Upload files to prod website
+        run: |
+          aws s3 sync . s3://my-s3-prod-website-bucket
