@@ -21,3 +21,9 @@ Run test suite
 ```shell
 docker compose exec voltage-client npm run test
 ```
+
+Create production build
+
+```shell
+docker compose exec voltage-client npm run build
+```

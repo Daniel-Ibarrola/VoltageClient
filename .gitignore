@@ -25,6 +25,3 @@ dist-ssr
 
 apiGateway-js-sdk/
 api_user.txt
-
-.env
-.env.prod
