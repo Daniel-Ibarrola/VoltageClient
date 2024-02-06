@@ -1,34 +1,34 @@
 
 export const STATION_ACTION = {
-    initFetch: "INIT_FETCH",
-    successFetchStations: "SUCCESS_STATIONS",
-    successFetchReportCount: "SUCCESS_REPORT_COUNT",
-    failFetch: "FAIL_FETCH",
+    INIT_FETCH: 0,
+    SUCCESS_FETCH_REPORTS: 1,
+    SUCCESS_FETCH_COUNT: 2,
+    FAIL_FETCH: 3,
 };
 
 export const stationDataReducer = (state, action) => {
     switch (action.type) {
-        case STATION_ACTION.initFetch:
+        case STATION_ACTION.INIT_FETCH:
             return {
                 ...state,
                 isLoading: true,
                 isError: false,
             };
-        case STATION_ACTION.successFetchReportCount:
+        case STATION_ACTION.SUCCESS_FETCH_COUNT:
             return {
                 ...state,
                 isLoading: false,
                 isError: false,
                 reports: action.payload,
             }
-        case STATION_ACTION.successFetchStations:
+        case STATION_ACTION.SUCCESS_FETCH_REPORTS:
             return {
                 ...state,
                 isLoading: false,
                 isError: false,
                 voltages: action.payload,
             }
-        case STATION_ACTION.failFetch:
+        case STATION_ACTION.FAIL_FETCH:
             return {
                 ...state,
                 isLoading: false,

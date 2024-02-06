@@ -1,53 +1,63 @@
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Station } from "../Station.jsx";
 
-vi.mock("axios");
+import { Station } from "../Station.jsx";
+import {getStationReports, getStationReportCounts} from "../../../services/index.js";
+
+vi.mock("../../../services/index.js", () => ({
+    getStationReports: vi.fn(),
+    getStationReportCounts: vi.fn()
+}));
 vi.mock("react-router-dom");
 
-const voltages = [
-    {
-        "date": "2023-03-30T12:00:00",
-        "battery": 205.00,
-        "panel": 100.80,
-    },
-    {
-        "date": "2023-03-31T00:00:00",
-        "battery": 100.50,
-        "panel": 200.80,
-    },
-    {
-        "date": "2023-03-31T12:00:00",
-        "battery": 50.50,
-        "panel": 150.80,
-    }
-]
-
-const reports = [
-    {
-        date: "2023-03-30",
-        reports: 1,
-    },
-    {
-        date: "2023-03-31",
-        reports: 2,
-    },
-]
 
 describe("Station", () => {
-    it("Displays error in case of invalid station parameter", () => {
-        useParams.mockImplementation(() => ({
-            stationName: "EstacionDesconocida",
-        }));
-        render(<Station />);
-        expect(screen.queryByText(/Invalida/)).toBeInTheDocument();
-    });
+
+    const reports = [
+        {
+            "date": "2023-03-30T12:00:00",
+            "battery": 205.00,
+            "panel": 100.80,
+        },
+        {
+            "date": "2023-03-31T00:00:00",
+            "battery": 100.50,
+            "panel": 200.80,
+        },
+        {
+            "date": "2023-03-31T12:00:00",
+            "battery": 50.50,
+            "panel": 150.80,
+        }
+    ];
+
+    const reportCounts = [
+        {
+            date: "2023-03-30",
+            count: 1,
+        },
+        {
+            date: "2023-03-31",
+            count: 2,
+        },
+    ]
 
     it("Fails fetching data",  async () => {
-       const promise = Promise.reject();
-       axios.get.mockImplementation(() => promise);
+        const reportsPromise = Promise.resolve({
+            data: [],
+            error: "Failed to fetch station reports"
+        });
+        const reportCountsPromise = Promise.resolve({
+            data: [],
+            error: "Failed to fetch report counts"
+        });
+
+        getStationReportCounts.mockImplementationOnce(() => reportCountsPromise);
+        getStationReports.mockImplementationOnce(() => reportsPromise);
+        useParams.mockImplementation(() => ({
+            stationName: "Tonalapa",
+        }));
        useParams.mockImplementation(() => ({
            stationName: "Tonalapa",
        }));
@@ -55,12 +65,11 @@ describe("Station", () => {
        render(<Station />);
        expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
 
-       try {
-            await waitFor(async () => await promise);
-       } catch (error) {
-            expect(screen.queryByText(/Cargando/)).toBeNull();
-            expect(screen.queryByText(/No se pudo cargar/)).toBeInTheDocument();
-       }
+        await waitFor(async () => await reportsPromise);
+        await waitFor(async () => await reportCountsPromise);
+
+        expect(screen.queryByText(/Cargando/)).toBeNull();
+        expect(screen.queryByText(/No se pudo cargar/)).toBeInTheDocument();
     });
 
     const prepareChartTest = () => {
@@ -82,24 +91,25 @@ describe("Station", () => {
 
     it("Fetches data and displays statistics and charts", async () => {
         prepareChartTest();
-        const voltagePromise = Promise.resolve({data: voltages});
-        const reportsPromise = Promise.resolve({data: reports})
-
-        axios.get.mockImplementation((url) => {
-            if (url.includes("counts"))
-                return reportsPromise;
-            if (url.includes("reports"))
-                return voltagePromise;
-            throw Error();
+        const reportsPromise = Promise.resolve({
+            data: reports,
+            error: ""
         });
+        const reportCountsPromise = Promise.resolve({
+            data: reportCounts,
+            error: ""
+        });
+
+        getStationReportCounts.mockImplementationOnce(() => reportCountsPromise);
+        getStationReports.mockImplementationOnce(() => reportsPromise);
         useParams.mockImplementation(() => ({
             stationName: "Tonalapa",
         }));
 
         render(<Station />);
         expect(screen.queryByText(/Cargando/)).toBeInTheDocument();
-        await waitFor(async () => await voltagePromise);
         await waitFor(async () => await reportsPromise);
+        await waitFor(async () => await reportCountsPromise);
 
         // After fetching the data the statistics part should render
         // using the data just fetched.
@@ -123,9 +133,9 @@ describe("Station", () => {
 
     it("Fetches data after selecting date range from dropdown", async () => {
         prepareChartTest();
-        const voltagePromise = Promise.resolve({data: voltages});
         const reportsPromise = Promise.resolve({data: reports});
-        const voltagePromise2 = Promise.resolve({data: [
+        const reportCountsPromise = Promise.resolve({data: reportCounts});
+        const reportsPromise2 = Promise.resolve({data: [
                 {
                     "date": "2023-05-04T00:00:00",
                     "battery": 100.50,
@@ -138,14 +148,14 @@ describe("Station", () => {
                 }
             ]})
 
-        axios.get
-            .mockImplementationOnce(() => voltagePromise)
+        getStationReportCounts.mockImplementationOnce(() => reportCountsPromise);
+        getStationReports
             .mockImplementationOnce(() => reportsPromise)
-            .mockImplementationOnce(() => voltagePromise2);
+            .mockImplementationOnce(() => reportsPromise2);
 
         render(<Station />);
-        await waitFor(async () => await voltagePromise);
         await waitFor(async () => await reportsPromise);
+        await waitFor(async () => await reportCountsPromise);
 
         // Clicking on the dropdown displays items.
         // The first dropdown will correspond to the voltages

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Toast from "react-bootstrap/Toast";
 
-import { identifyStations } from "../../utils/identifyStations.js";
+import { identifyStations } from "../../utils/index.js";
 import "./style.css"
 
 
@@ -30,7 +30,7 @@ const Notifications = ({ reports }) => {
   const defectiveStations = identifyStations(reports);
   return (
       <>
-        {defectiveStations.map(st => <AlertToast key={st.name} body={st.body} date={st.date} />)}
+        {defectiveStations.map(st => <AlertToast key={st.station} body={st.body} date={st.date} />)}
       </>
   );
 };

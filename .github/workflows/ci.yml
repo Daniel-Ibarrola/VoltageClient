@@ -69,3 +69,5 @@ jobs:
             ${{ env.IMAGE }}:latest
       - name: Unit and integration tests
         run: docker exec voltage-client npm run test-ci
+
+  # TODO: add cd pipeline to upload static files to S3

@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import axios from "axios";
 import * as React from "react";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -11,7 +10,7 @@ import { STATIONS_ACTIONS, stationsReducer } from "../../reducers/index.js";
 import { Table } from "./Table.jsx";
 import { SearchForm } from "./SearchForm.jsx";
 import { Notifications } from "./Notifications.jsx";
-import { reportsUrl } from "../../services/index.js";
+import { getLastReports } from "../../services/index.js";
 
 import './style.css'
 
@@ -24,7 +23,7 @@ const Home = ({ fetchTime }) => {
             data: [],
             display: [],  // This is the data that will be displayed by the table
             isLoading: false,
-            isError: false,
+            error: "",
             searchTerm: "",
         }
     );
@@ -32,18 +31,18 @@ const Home = ({ fetchTime }) => {
     const { token } = useContext(AuthContext);
 
     const fetchLastReports = async () => {
-        dispatchStations({type: STATIONS_ACTIONS.initFetch});
-        try {
-            const result = await axios.get(
-                reportsUrl,
-                {headers: {Authorization: `Bearer ${token}`}}
-            );
+        dispatchStations({type: STATIONS_ACTIONS.INIT_FETCH});
+        const reports = await getLastReports(token);
+        if (reports.data.length > 0) {
             dispatchStations({
-                type: STATIONS_ACTIONS.successFetch,
-                payload: result.data,
-            })
-        } catch {
-            dispatchStations({ type: STATIONS_ACTIONS.failFetch });
+                type: STATIONS_ACTIONS.SUCCESS_FETCH,
+                payload: reports.data,
+            });
+        } else {
+            dispatchStations({
+                type: STATIONS_ACTIONS.FAIL_FETCH,
+                payload: reports.error
+            });
         }
     }
 
@@ -57,13 +56,12 @@ const Home = ({ fetchTime }) => {
 
     const handleSearchInput = (event) => {
         dispatchStations({
-            type: STATIONS_ACTIONS.search,
+            type: STATIONS_ACTIONS.SEARCH,
             payload: event.target.value,
         });
     };
 
     return (
-        <>
             <Container>
                 <Row>
                     <Col>
@@ -71,9 +69,9 @@ const Home = ({ fetchTime }) => {
                     </Col>
                 </Row>
 
-                {stations.isError &&
+                {stations.error &&
                     <FailAlert>
-                    <p><strong>Error:</strong> No se pudo cargar los últimos datos</p>
+                    <p><strong>Error:</strong> {stations.error}</p>
                     </FailAlert>
                 }
                 {stations.isLoading && <LoadSpinner />}
@@ -91,8 +89,6 @@ const Home = ({ fetchTime }) => {
                     </Col>
                 </Row>
             </Container>
-        </>
-
     );
 }
 

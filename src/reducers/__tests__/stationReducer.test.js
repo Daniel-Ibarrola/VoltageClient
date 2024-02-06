@@ -2,14 +2,14 @@ import {describe, expect, it} from "vitest";
 import {STATIONS_ACTIONS, stationsReducer} from "../stationsReducer.js";
 
 const stationOne = {
-    name: "Caracol",
+    station: "Caracol",
     date:  "2023-03-31T00:00:00",
     battery: 300.12,
     panel: 100.50,
 };
 
 const stationTwo = {
-    name: "Tonalapa",
+    station: "Tonalapa",
     date:  "2023-03-31T00:00:00",
     battery: 150.24,
     panel: 200.15,
@@ -20,12 +20,12 @@ const stations = [stationOne, stationTwo]
 
 describe("stationsReducer", () => {
     it("initiating fetch sets loading state", () => {
-        const action = { type: STATIONS_ACTIONS.initFetch };
+        const action = { type: STATIONS_ACTIONS.INIT_FETCH };
         const state = {
             data: stations,
             display: stations,
             isLoading: false,
-            isError: false,
+            error: "",
             searchTerm: "",
         };
 
@@ -34,19 +34,22 @@ describe("stationsReducer", () => {
             data: stations,
             display: stations,
             isLoading: true,
-            isError: false,
+            error: "",
             searchTerm: "",
         }
         expect(newState).toStrictEqual(expectedState);
     });
 
     it("updates data on successful fetching", () => {
-        const action = { type: STATIONS_ACTIONS.successFetch, payload: stations};
+        const action = {
+            type: STATIONS_ACTIONS.SUCCESS_FETCH,
+            payload: stations
+        };
         const state = {
             data: [],
             display: [],
             isLoading: true,
-            isError: false,
+            error: "",
             searchTerm: "Caracol",
         }
 
@@ -55,19 +58,22 @@ describe("stationsReducer", () => {
             data: stations,  // Home should be sorted
             display: [stationOne],
             isLoading: false,
-            isError: false,
+            error: "",
             searchTerm: "Caracol",
         }
         expect(newState).toStrictEqual(expectedState);
     });
 
     it("sets error state on fetch fail", () => {
-        const action = { type: STATIONS_ACTIONS.failFetch };
+        const action = {
+            type: STATIONS_ACTIONS.FAIL_FETCH,
+            payload: "Error fetching data"
+        };
         const state = {
             data: [],
             display: [],
             isLoading: true,
-            isError: false,
+            error: "",
             searchTerm: "",
         };
 
@@ -76,19 +82,21 @@ describe("stationsReducer", () => {
             data: [],
             display: [],
             isLoading: false,
-            isError: true,
+            error: "Error fetching data",
             searchTerm: "",
         }
         expect(newState).toStrictEqual(expectedState);
     });
 
     it("search updates displayed data", () => {
-        const action = { type: STATIONS_ACTIONS.search, payload: "Caracol" };
+        const action = {
+            type: STATIONS_ACTIONS.SEARCH, payload: "Caracol"
+        };
         const state = {
             data: stations,
             display: [],
             isLoading: false,
-            isError: false,
+            error: "",
             searchTerm: "",
         };
 
@@ -97,7 +105,7 @@ describe("stationsReducer", () => {
             data: stations,
             display: [stationOne],
             isLoading: false,
-            isError: false,
+            error: "",
             searchTerm: "Caracol",
         }
         expect(newState).toStrictEqual(expectedState);
